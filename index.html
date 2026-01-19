@@ -1,1058 +1,573 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Marvel Timeline</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MCU Chronological Timeline — Grid/Timeline</title>
+<link rel="icon" href="Icon/favicon.webp" type="image/webp" />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-<!-- Favicon -->
-<link rel="icon" href="Icon/favicon.webp" type="image/webp">
-
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Roboto', sans-serif; background: #121212; color: #fff; }
-  a { color: #f5c518; text-decoration: none; }
-  header { background: linear-gradient(90deg, #1f1f1f, #2c2c2c); padding: 30px; text-align: center; }
-  header h1 { font-size: 2.5rem; color: #f5c518; }
-  header p { font-size: 1.1rem; color: #ddd; margin-top: 10px; }
-  button { padding: 10px 20px; margin-top: 15px; cursor: pointer; background: #f5c518; border: none; border-radius: 8px; font-weight: bold; color: #000; transition: 0.3s; }
-  button:hover { background: #ffd633; }
-
-  main { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
-
-  /* Timeline mode */
-  .timeline-container { position: relative; margin: 0 auto; padding: 40px 0; width: 90%; }
-  .timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 4px; background: red; transform: translateX(-50%); }
-  .timeline-item { position: relative; width: 50%; padding: 20px 40px; }
-  .timeline-item.left { left: 0; text-align: right; }
-  .timeline-item.right { left: 50%; text-align: left; }
-  .timeline-item img { width: 180px; height: 260px; object-fit: cover; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.5); }
-  .timeline-content { display: inline-block; max-width: 300px; padding: 10px; background: #1e1e1e; border-radius: 12px; margin-top: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-  .timeline-content h3 { color: #f5c518; margin-bottom: 5px; }
-  .timeline-content p { color: #ccc; font-size: 0.9rem; }
-  .timeline-content .badge { display: inline-block; padding: 2px 8px; background: red; color: #fff; border-radius: 8px; font-size: 0.75rem; margin-bottom: 5px; font-weight: bold; }
-
-  /* Card mode */
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
-  .card { background: #1e1e1e; border-radius: 12px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-  .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.6); }
-  .card img { width: 100%; height: 350px; object-fit: cover; }
-  .card-content { padding: 15px; }
-  .card-content h3 { font-size: 1.2rem; margin-bottom: 10px; color: #f5c518; }
-  .card-content p { font-size: 0.9rem; color: #ccc; }
-  .card-content .badge { display: inline-block; padding: 2px 8px; background: red; color: white; font-weight: bold; border-radius: 8px; font-size: 0.75rem; margin-bottom: 8px; }
-
-  /* Hide both initially and show based on mode */
-  .timeline-container, .card-grid { display: none; }
-
-  /* Footer */
-  footer { text-align: center; padding: 20px; background: #1f1f1f; margin-top: 50px; color: #ccc; }
-
-  /* Responsive */
-  @media (max-width: 768px) {
-
-  .timeline-line {
-    left: 20px;
-  }
-
-  .timeline-item {
-    width: 100%;
-    left: 0 !important;
-    padding: 15px 15px 15px 50px;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-  }
-
-  .timeline-item img {
-    width: 100%;
-    max-width: 220px;
-    height: auto;
-  }
-
-  .timeline-content {
-    max-width: 100%;
-  }
-
-  .timeline-item {
-  margin-bottom: 25px;
-}
+:root{
+  --bg:#0a0a0b;
+  --panel: rgba(18,18,18,0.86);
+  --text:#e9e9e9;
+  --muted:#a9a9a9;
+  --accent:#ed1d24;
+  --overlay-rgba: 0.66; /* overlay darkness on wallpaper */
 }
 
+/* DOOMSDAY WALLPAPER BACKGROUND with overlay */
+body {
+  margin:0;
+  font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color:var(--text);
+  min-height:100vh;
+  /* wallpaper should be in wallpapers/Avengers_Doomsday.jpg */
+  background:
+    linear-gradient(rgba(0,0,0,var(--overlay-rgba)), rgba(0,0,0,var(--overlay-rgba))),
+    url("wallpapers/Avengers_Doomsday.jpg") center/cover no-repeat fixed;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+/* basic reset */
+*{box-sizing:border-box}
+
+/* header (not sticky) */
+header{
+  position:static;
+  padding:24px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  border-bottom:1px solid rgba(255,255,255,0.04);
+}
+header img.logo{ width:220px; height:auto; display:block }
+
+/* controls row */
+.controls{
+  max-width:1200px;
+  margin:18px auto;
+  padding:0 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+/* left side (search + grid icon + type filters) */
+.left-controls{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+/* search */
+.search{
+  background:rgba(255,255,255,0.03);
+  border-radius:12px;
+  padding:8px 12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:320px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.6);
+}
+.search svg{ color:var(--muted) }
+.search input{
+  background:transparent;
+  border:none;
+  color:var(--text);
+  outline:none;
+  font-size:1rem;
+  width:340px;
+}
+
+/* grid toggle button (icon) - placed in same lane as search */
+.grid-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:44px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.04);
+  cursor:pointer;
+}
+.grid-toggle.active{
+  background:var(--accent);
+  color:#111;
+  border-color:transparent;
+}
+
+/* type chips (All / Movies / Series / Special) */
+.chips{ display:flex; gap:8px; flex-wrap:wrap; align-items:center }
+.chip{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700; }
+.chip.active{ background:var(--accent); color:#fff; border-color:transparent; box-shadow:0 6px 18px rgba(237,29,36,0.12); }
+
+/* doomsday timer row */
+.doomsday{
+  max-width:1200px;
+  margin:6px auto;
+  padding:0 18px;
+  color:var(--muted);
+  display:flex;
+  align-items:center;
+  gap:12px;
+  justify-content:space-between;
+}
+.doomsday .label{ font-weight:700; color:#fff; }
+.doomsday .timer{ font-family:monospace; font-size:1.05rem; color:var(--accent); font-weight:700; }
+
+/* main area */
+main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
+
+/* timeline container */
+.timeline-container{ position:relative; padding:30px 0 60px; }
+
+/* vertical line + fill */
+.timeline-line{ position:absolute; left:50%; top:0; bottom:0; width:6px; background:var(--accent); transform:translateX(-50%); border-radius:3px; z-index:1; box-shadow:0 0 20px rgba(237,29,36,0.12); }
+.timeline-fill{ position:absolute; left:50%; width:6px; background:linear-gradient(to bottom, #ff3b30, #ed1d24); transform:translateX(-50%); border-radius:3px; z-index:2; top:0; height:0; transition:height 0.4s ease; }
+
+/* item */
+.timeline-item{ position:relative; width:50%; padding:10px 20px; margin-bottom:36px; }
+.timeline-item.left{ left:0; display:flex; justify-content:flex-end; }
+.timeline-item.right{ left:50%; display:flex; justify-content:flex-start; }
+
+.timeline-card{ width:calc(100% - 40px); display:flex; background:var(--panel); border-radius:12px; overflow:hidden; box-shadow:0 14px 36px rgba(0,0,0,0.7); transition:transform 0.28s ease, box-shadow 0.28s ease; min-height:220px; }
+.timeline-card:hover{ transform:translateY(-6px); box-shadow:0 28px 60px rgba(0,0,0,0.8); }
+
+/* poster + iframe */
+.poster{ width:45%; flex-shrink:0; position:relative; overflow:hidden; min-height:220px; background:#000; }
+.poster img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease, opacity .45s ease; }
+.poster iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; opacity:0; transition:opacity .45s ease; pointer-events:none; }
+.poster.playing img{ transform:scale(1.04); opacity:0; }
+.poster.playing iframe{ opacity:1; pointer-events:auto; }
+
+/* content */
+.timeline-content{ width:55%; padding:20px 24px; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+.badge{ background:var(--accent); color:#fff; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; display:inline-block; }
+.timeline-content h3{ margin:8px 0 4px; font-size:1.15rem; color:#fff; }
+.timeline-content p{ color:var(--muted); margin-bottom:6px; }
+.meta{ color:var(--muted); font-size:0.92rem; }
+
+/* card-grid */
+.card-grid{ display:none; margin-top:20px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
+.card-grid.active{ display:grid; }
+
+/* responsive adjustments */
+@media (max-width:900px){
+  .timeline-item{ width:100%; left:0 !important; padding-left:72px; }
+  .timeline-card{ flex-direction:column; min-height:340px; }
+  .poster{ width:100%; height:240px; }
+  .timeline-content{ width:100%; }
+  .timeline-line, .timeline-fill{ left:36px; transform:none; }
+  .left-controls{ width:100%; gap:8px; }
+}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="main-heading">
-  <img src="Icon/logo.png" width="250px" alt="Marvel Cinematic Universe Timeline">
-  </div>
-
-  <p>Movies & Series Timeline (up to Avengers: Doomsday)</p>
-  <button id="toggleMode">Switch to Card Mode</button>
+  <img src="Icon/logo.png" class="logo" alt="Marvel Studios Logo">
 </header>
 
+<div class="controls">
+  <div class="left-controls">
+    <div class="search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)"><path d="M21 21l-4.35-4.35"/><circle cx="11" cy="11" r="6"/></svg>
+      <input id="searchInput" placeholder="Search title, year, actor..." aria-label="Search timeline">
+    </div>
+
+    <!-- grid toggle icon (same lane as search) -->
+    <button id="gridToggle" class="grid-toggle" title="Toggle grid view" aria-pressed="false" aria-label="Toggle grid view">
+      <!-- grid icon -->
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)">
+        <rect x="3" y="3" width="8" height="8" rx="1"></rect>
+        <rect x="13" y="3" width="8" height="8" rx="1"></rect>
+        <rect x="3" y="13" width="8" height="8" rx="1"></rect>
+        <rect x="13" y="13" width="8" height="8" rx="1"></rect>
+      </svg>
+    </button>
+
+    <div class="chips" role="list" aria-label="Type filters">
+      <button class="chip active" data-filter-type="all">All</button>
+      <button class="chip" data-filter-type="movie">Movies</button>
+      <button class="chip" data-filter-type="series">Series</button>
+      <button class="chip" data-filter-type="special">Special</button>
+    </div>
+  </div>
+
+  <!-- keep right side empty for now (timer is below) -->
+  <div style="min-width:120px;"></div>
+</div>
+
+<div class="doomsday" id="doomsdayContainer" aria-live="polite">
+  <div>
+    <span class="label">Avengers: Doomsday — Release countdown</span>
+    <div style="color:var(--muted);font-size:0.9rem">Target release: <strong style="color:#fff">Dec 18, 2026 11:30</strong></div>
+  </div>
+  <div class="timer" id="doomsdayTimer">—</div>
+</div>
+
 <main>
-  <!-- Timeline Mode -->
-  <div class="timeline-container" id="timeline">
-  <div class="timeline-line"></div>
-
-  <!-- ⚔️ Ancient / Pre‑Modern Era -->
-  <div class="timeline-item left">
-    <img src="Images/eternals.webp" alt="Eternals">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Eternals (Ancient Era)</h3>
-      <p>Immortal beings observe humanity's development across millennia.</p>
-    </div>
+  <div id="timelineRoot">
+    <div class="timeline-container" id="timeline"></div>
+    <div class="card-grid" id="cardGrid" aria-hidden="true"></div>
   </div>
-
-  <!-- 🪖 1940s -->
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Captain+America+1" alt="Captain America: The First Avenger">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Captain America: The First Avenger (1940s)</h3>
-      <p>Steve Rogers becomes Captain America during World War II.</p>
-    </div>
-  </div>
-
-  <!-- 🍿 1990s -->
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Captain+Marvel" alt="Captain Marvel">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Captain Marvel (1995)</h3>
-      <p>Carol Danvers gains superpowers and becomes Captain Marvel.</p>
-    </div>
-  </div>
-
-  <!-- 🛠️ 2000s – Early MCU Setup -->
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Iron+Man" alt="Iron Man">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Iron Man (2008)</h3>
-      <p>Tony Stark builds the Iron Man suit and begins the MCU.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Iron+Man+2" alt="Iron Man 2">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Iron Man 2 (2010)</h3>
-      <p>Tony faces new threats while revealing his identity to the world.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Hulk" alt="The Incredible Hulk">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>The Incredible Hulk (2008)</h3>
-      <p>Bruce Banner becomes the Hulk and battles Abomination.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Thor" alt="Thor">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Thor (2011)</h3>
-      <p>Thor is banished to Earth and learns humility.</p>
-    </div>
-  </div>
-
-  <!-- 💥 Assembling the Avengers -->
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Avengers" alt="The Avengers">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>The Avengers (2012)</h3>
-      <p>The heroes unite to stop Loki and the Chitauri invasion.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Iron+Man+3" alt="Iron Man 3">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Iron Man 3 (2013)</h3>
-      <p>Tony faces post-traumatic stress and the Mandarin threat.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Thor+Dark+World" alt="Thor: The Dark World">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Thor: The Dark World (2013)</h3>
-      <p>Thor battles Malekith and the Dark Elves.</p>
-    </div>
-  </div>
-
-  <!-- 👥 Modern MCU — Expansion Phase -->
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Captain+America+Winter+Soldier" alt="Captain America: The Winter Soldier">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Captain America: The Winter Soldier (2014)</h3>
-      <p>Steve Rogers uncovers Hydra's infiltration of S.H.I.E.L.D.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Guardians+of+the+Galaxy" alt="Guardians of the Galaxy">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Guardians of the Galaxy (2014)</h3>
-      <p>A group of misfits bands together to stop Ronan.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Guardians+Vol+2" alt="Guardians of the Galaxy Vol. 2">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Guardians of the Galaxy Vol. 2 (2014)</h3>
-      <p>The team explores family ties and Peter Quill’s past.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Avengers+Age+of+Ultron" alt="Avengers: Age of Ultron">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Avengers: Age of Ultron (2015)</h3>
-      <p>The Avengers face Ultron, a rogue AI threatening humanity.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Ant-Man" alt="Ant-Man">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Ant-Man (2015)</h3>
-      <p>Scott Lang becomes Ant-Man and learns to shrink and fight.</p>
-    </div>
-  </div>
-
-  <!-- 🧑‍💼 Ties To Multiverse & Modern Strife -->
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Civil+War" alt="Captain America: Civil War">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Captain America: Civil War (2016)</h3>
-      <p>The Avengers are divided over government oversight.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Black+Widow" alt="Black Widow">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Black Widow (2016)</h3>
-      <p>Natasha Romanoff confronts her past and Red Room ties.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Black+Panther" alt="Black Panther">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Black Panther (2016)</h3>
-      <p>T’Challa returns home to lead Wakanda as king.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Spider-Man+Homecoming" alt="Spider-Man: Homecoming">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Spider-Man: Homecoming (2016)</h3>
-      <p>Peter Parker balances high school life with superhero duties.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Doctor+Strange" alt="Doctor Strange">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Doctor Strange (2016)</h3>
-      <p>Stephen Strange becomes the Master of the Mystic Arts.</p>
-    </div>
-  </div>
-
-  <!-- 🌍 Infinity War & Blip Events -->
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Thor+Ragnarok" alt="Thor: Ragnarok">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Thor: Ragnarok (2017)</h3>
-      <p>Thor teams up with Hulk and fights Hela to save Asgard.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Ant-Man+and+the+Wasp" alt="Ant-Man and the Wasp">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Ant-Man and the Wasp (2018)</h3>
-      <p>Scott Lang joins Hope van Dyne to rescue Janet from the Quantum Realm.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Avengers+Infinity+War" alt="Avengers: Infinity War">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Avengers: Infinity War (2018)</h3>
-      <p>Thanos seeks the Infinity Stones to reshape the universe.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Avengers+Endgame" alt="Avengers: Endgame">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Avengers: Endgame (2023)</h3>
-      <p>The Avengers attempt to undo the Blip and defeat Thanos.</p>
-    </div>
-  </div>
-
-  <!-- 📺 Phase 4 — Multiverse Saga Begins -->
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=WandaVision" alt="WandaVision">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>WandaVision (2023)</h3>
-      <p>Wanda creates a sitcom reality while grappling with grief.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Falcon+and+Winter+Soldier" alt="The Falcon and the Winter Soldier">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>The Falcon and the Winter Soldier (2023)</h3>
-      <p>Sam Wilson and Bucky Barnes confront global threats post-Endgame.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Loki" alt="Loki">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Loki (2023)</h3>
-      <p>Loki faces the TVA and multiverse chaos ensues.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=What+If" alt="What If...?">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>What If...? (2023)</h3>
-      <p>Explores alternate realities in the multiverse. Optional overview.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Hawkeye" alt="Hawkeye">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Hawkeye (2024)</h3>
-      <p>Clint Barton trains Kate Bishop while facing past enemies.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Ms+Marvel" alt="Ms. Marvel">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Ms. Marvel (2024)</h3>
-      <p>Kamala Khan discovers her powers and idolizes the Avengers.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=She-Hulk" alt="She-Hulk: Attorney at Law">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>She-Hulk: Attorney at Law (2024)</h3>
-      <p>Jennifer Walters balances law career with being She-Hulk.</p>
-    </div>
-  </div>
-
-  <!-- 🎬 Continued Multiverse Era -->
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Shang-Chi" alt="Shang-Chi and the Legend of the Ten Rings">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Shang-Chi and the Legend of the Ten Rings (2024)</h3>
-      <p>Shang-Chi confronts his past and the Ten Rings organization.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Spider-Man+Far+From+Home" alt="Spider-Man: Far From Home">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Spider-Man: Far From Home (2024)</h3>
-      <p>Peter Parker deals with post-Endgame world threats.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Spider-Man+No+Way+Home" alt="Spider-Man: No Way Home">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Spider-Man: No Way Home (2024)</h3>
-      <p>Multiverse villains enter Peter’s reality; chaos ensues.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Doctor+Strange+2" alt="Doctor Strange in the Multiverse of Madness">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Doctor Strange in the Multiverse of Madness (2024)</h3>
-      <p>Doctor Strange battles multiversal threats unleashed by Wanda.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Moon+Knight" alt="Moon Knight">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Moon Knight (2024)</h3>
-      <p>Marc Spector struggles with multiple identities and mystical forces.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Echo" alt="Echo">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Echo (2024)</h3>
-      <p>Maya Lopez returns to confront her past and protect her city.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Ironheart" alt="Ironheart">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Ironheart (2025)</h3>
-      <p>Riri Williams becomes Ironheart, building her own armored suit.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Werewolf+by+Night" alt="Werewolf by Night">
-    <div class="timeline-content">
-      <span class="badge">Special</span>
-      <h3>Werewolf by Night (2025)</h3>
-      <p>Horror-themed special introducing supernatural MCU elements.</p>
-    </div>
-  </div>
-
-  <!-- 🌀 Phase 5 — Up to Doomsday -->
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Quantumania" alt="Ant-Man and the Wasp: Quantumania">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Ant-Man and the Wasp: Quantumania (2025)</h3>
-      <p>Scott and Hope confront Kang the Conqueror in the Quantum Realm.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Guardians+Vol+3" alt="Guardians of the Galaxy Vol. 3">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Guardians of the Galaxy Vol. 3 (2025)</h3>
-      <p>The Guardians wrap up personal arcs and protect the galaxy.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=The+Marvels" alt="The Marvels">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>The Marvels (2025)</h3>
-      <p>Carol Danvers teams up with Kamala and Monica for cosmic adventures.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Secret+Invasion" alt="Secret Invasion">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Secret Invasion (2025)</h3>
-      <p>Nick Fury uncovers a Skrull infiltration on Earth.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Agatha+All+Along" alt="Agatha: Coven of Chaos">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Agatha: All Along (2025)</h3>
-      <p>Agatha explores her past and magical powers post-WandaVision.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Daredevil+Born+Again" alt="Daredevil: Born Again">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Daredevil: Born Again (2025)</h3>
-      <p>Matt Murdock fights crime in Hell’s Kitchen and faces Wilson Fisk.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Captain+America+Brave+New+World" alt="Captain America: Brave New World">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Captain America: Brave New World (2025)</h3>
-      <p>Sam Wilson takes up the mantle of Captain America amid new threats.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Thunderbolts" alt="Thunderbolts">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Thunderbolts (2025)</h3>
-      <p>Reformed villains take on high-risk missions for the government.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Wonder+Man" alt="Wonder Man">
-    <div class="timeline-content">
-      <span class="badge">Series</span>
-      <h3>Wonder Man (2025)</h3>
-      <p>Simon Williams navigates Hollywood stardom and superhuman powers.</p>
-    </div>
-  </div>
-
-  <!-- 💥 Lead-In to Doomsday -->
-  <div class="timeline-item left">
-    <img src="https://via.placeholder.com/180x260?text=Fantastic+Four" alt="Fantastic Four: First Steps">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>The Fantastic Four: First Steps (2026)</h3>
-      <p>Marvel's iconic team comes together for their first adventure.</p>
-    </div>
-  </div>
-
-  <div class="timeline-item right">
-    <img src="https://via.placeholder.com/180x260?text=Avengers+Doomsday" alt="Avengers: Doomsday">
-    <div class="timeline-content">
-      <span class="badge">Movie</span>
-      <h3>Avengers: Doomsday (2026)</h3>
-      <p>The ultimate battle of heroes against the multiverse threat.</p>
-    </div>
-  </div>
-
-</div>
-
-
-  <!-- Card Mode -->
-<div class="card-grid" id="cardMode">
-
-  <!-- ⚔️ Ancient / Pre‑Modern Era -->
-  <div class="card">
-    <img src="Images/eternals.webp" alt="Eternals">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Eternals (Ancient Era)</h3>
-      <p>Immortal beings observe humanity's development across millennia.</p>
-    </div>
-  </div>
-
-  <!-- 🪖 1940s -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Captain+America+1" alt="Captain America: The First Avenger">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Captain America: The First Avenger (1940s)</h3>
-      <p>Steve Rogers becomes Captain America during World War II.</p>
-    </div>
-  </div>
-
-  <!-- 🍿 1990s -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Captain+Marvel" alt="Captain Marvel">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Captain Marvel (1995)</h3>
-      <p>Carol Danvers gains superpowers and becomes Captain Marvel.</p>
-    </div>
-  </div>
-
-  <!-- 🛠️ 2000s – Early MCU Setup -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Iron+Man" alt="Iron Man">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Iron Man (2008)</h3>
-      <p>Tony Stark builds the Iron Man suit and begins the MCU.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Iron+Man+2" alt="Iron Man 2">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Iron Man 2 (2010)</h3>
-      <p>Tony faces new threats while revealing his identity to the world.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Hulk" alt="The Incredible Hulk">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>The Incredible Hulk (2008)</h3>
-      <p>Bruce Banner becomes the Hulk and battles Abomination.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Thor" alt="Thor">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Thor (2011)</h3>
-      <p>Thor is banished to Earth and learns humility.</p>
-    </div>
-  </div>
-
-  <!-- 💥 Assembling the Avengers -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Avengers" alt="The Avengers">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>The Avengers (2012)</h3>
-      <p>The heroes unite to stop Loki and the Chitauri invasion.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Iron+Man+3" alt="Iron Man 3">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Iron Man 3 (2013)</h3>
-      <p>Tony faces post-traumatic stress and the Mandarin threat.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Thor+Dark+World" alt="Thor: The Dark World">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Thor: The Dark World (2013)</h3>
-      <p>Thor battles Malekith and the Dark Elves.</p>
-    </div>
-  </div>
-
-  <!-- 👥 Modern MCU — Expansion Phase -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Captain+America+Winter+Soldier" alt="Captain America: The Winter Soldier">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Captain America: The Winter Soldier (2014)</h3>
-      <p>Steve Rogers uncovers Hydra's infiltration of S.H.I.E.L.D.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Guardians+of+the+Galaxy" alt="Guardians of the Galaxy">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Guardians of the Galaxy (2014)</h3>
-      <p>A group of misfits bands together to stop Ronan.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Guardians+Vol+2" alt="Guardians of the Galaxy Vol. 2">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Guardians of the Galaxy Vol. 2 (2014)</h3>
-      <p>The team explores family ties and Peter Quill’s past.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Avengers+Age+of+Ultron" alt="Avengers: Age of Ultron">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Avengers: Age of Ultron (2015)</h3>
-      <p>The Avengers face Ultron, a rogue AI threatening humanity.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Ant-Man" alt="Ant-Man">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Ant-Man (2015)</h3>
-      <p>Scott Lang becomes Ant-Man and learns to shrink and fight.</p>
-    </div>
-  </div>
-
-  <!-- 🧑‍💼 Modern MCU — Multiverse & Strife -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Civil+War" alt="Captain America: Civil War">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Captain America: Civil War (2016)</h3>
-      <p>The Avengers are divided over government oversight.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Black+Widow" alt="Black Widow">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Black Widow (2016)</h3>
-      <p>Natasha Romanoff confronts her past and Red Room ties.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Black+Panther" alt="Black Panther">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Black Panther (2016)</h3>
-      <p>T’Challa returns home to lead Wakanda as king.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Spider-Man+Homecoming" alt="Spider-Man: Homecoming">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Spider-Man: Homecoming (2016)</h3>
-      <p>Peter Parker balances high school life with superhero duties.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Doctor+Strange" alt="Doctor Strange">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Doctor Strange (2016)</h3>
-      <p>Stephen Strange becomes the Master of the Mystic Arts.</p>
-    </div>
-  </div>
-
-  <!-- 🌍 Infinity War & Blip Events -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Thor+Ragnarok" alt="Thor: Ragnarok">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Thor: Ragnarok (2017)</h3>
-      <p>Thor teams up with Hulk and fights Hela to save Asgard.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Ant-Man+and+the+Wasp" alt="Ant-Man and the Wasp">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Ant-Man and the Wasp (2018)</h3>
-      <p>Scott Lang joins Hope van Dyne to rescue Janet from the Quantum Realm.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Avengers+Infinity+War" alt="Avengers: Infinity War">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Avengers: Infinity War (2018)</h3>
-      <p>Thanos seeks the Infinity Stones to reshape the universe.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Avengers+Endgame" alt="Avengers: Endgame">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Avengers: Endgame (2023)</h3>
-      <p>The Avengers attempt to undo the Blip and defeat Thanos.</p>
-    </div>
-  </div>
-
-    <!-- 📺 Phase 4 — Multiverse Saga Begins -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=WandaVision" alt="WandaVision">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>WandaVision (2023)</h3>
-      <p>Wanda creates a sitcom reality while dealing with grief.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Falcon+and+Winter+Soldier" alt="The Falcon and the Winter Soldier">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>The Falcon and the Winter Soldier (2023)</h3>
-      <p>Sam Wilson and Bucky Barnes face global threats and legacy issues.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Loki" alt="Loki">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Loki (Seasons 1 & 2, 2023)</h3>
-      <p>Loki navigates multiversal chaos and the TVA’s secrets.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=What+If" alt="What If...?">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>What If...? (Optional, 2023)</h3>
-      <p>Explores alternate realities across the multiverse.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Hawkeye" alt="Hawkeye">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Hawkeye (2023)</h3>
-      <p>Clint Barton mentors Kate Bishop while facing criminal threats.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Ms+Marvel" alt="Ms. Marvel">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Ms. Marvel (2023)</h3>
-      <p>Kamala Khan discovers her powers and becomes a superhero.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=She-Hulk" alt="She-Hulk: Attorney at Law">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>She-Hulk: Attorney at Law (2023)</h3>
-      <p>Jennifer Walters balances her law career with superhero life.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Shang-Chi" alt="Shang-Chi and the Legend of the Ten Rings">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Shang-Chi and the Legend of the Ten Rings (2023)</h3>
-      <p>Shang-Chi confronts his past and the Ten Rings organization.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Spider-Man+Far+From+Home" alt="Spider-Man: Far From Home">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Spider-Man: Far From Home (2023)</h3>
-      <p>Peter Parker deals with the aftermath of Endgame and new threats.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Spider-Man+No+Way+Home" alt="Spider-Man: No Way Home">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Spider-Man: No Way Home (2024)</h3>
-      <p>Peter faces the multiverse and villains from alternate realities.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Doctor+Strange+Multiverse" alt="Doctor Strange in the Multiverse of Madness">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Doctor Strange in the Multiverse of Madness (2024)</h3>
-      <p>Strange confronts the consequences of multiversal tampering.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Moon+Knight" alt="Moon Knight">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Moon Knight (2024)</h3>
-      <p>Marc Spector becomes Moon Knight while struggling with dissociative identity disorder.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Echo" alt="Echo">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Echo (2024)</h3>
-      <p>Maya Lopez returns to confront her past and become a hero.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Ironheart" alt="Ironheart">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Ironheart (2024)</h3>
-      <p>Riri Williams builds a powerful suit to become a young hero.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Werewolf+by+Night" alt="Werewolf by Night">
-    <div class="card-content">
-      <span class="badge">Special</span>
-      <h3>Werewolf by Night (2024)</h3>
-      <p>A supernatural one-off special in the MCU multiverse.</p>
-    </div>
-  </div>
-
-  <!-- 🌀 Phase 5 — Up to Doomsday -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Quantumania" alt="Ant-Man and the Wasp: Quantumania">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Ant-Man and the Wasp: Quantumania (2025)</h3>
-      <p>Scott and Hope confront Kang the Conqueror in the Quantum Realm.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Guardians+Vol+3" alt="Guardians of the Galaxy Vol. 3">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Guardians of the Galaxy Vol. 3 (2025)</h3>
-      <p>The Guardians wrap up personal arcs and protect the galaxy.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=The+Marvels" alt="The Marvels">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>The Marvels (2025)</h3>
-      <p>Carol teams up with Kamala and Monica for cosmic adventures.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Secret+Invasion" alt="Secret Invasion">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Secret Invasion (2025)</h3>
-      <p>Nick Fury uncovers a Skrull infiltration on Earth.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Agatha+All+Along" alt="Agatha: All Along">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Agatha: All Along (2025)</h3>
-      <p>Agatha explores her past and magical powers post-WandaVision.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Daredevil+Born+Again" alt="Daredevil: Born Again">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Daredevil: Born Again (2025)</h3>
-      <p>Matt Murdock fights crime in Hell’s Kitchen and faces Wilson Fisk.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Captain+America+Brave+New+World" alt="Captain America: Brave New World">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Captain America: Brave New World (2025)</h3>
-      <p>Sam Wilson takes up the mantle of Captain America amid new threats.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Thunderbolts" alt="Thunderbolts">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Thunderbolts (2025)</h3>
-      <p>Reformed villains take on high-risk missions for the government.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Wonder+Man" alt="Wonder Man">
-    <div class="card-content">
-      <span class="badge">Series</span>
-      <h3>Wonder Man (2025)</h3>
-      <p>Simon Williams navigates Hollywood stardom and superhuman powers.</p>
-    </div>
-  </div>
-
-  <!-- 💥 Lead‑In to Doomsday -->
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Fantastic+Four" alt="Fantastic Four: First Steps">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>The Fantastic Four: First Steps (2026)</h3>
-      <p>Marvel's iconic team comes together for their first adventure.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <img src="https://via.placeholder.com/400x600?text=Avengers+Doomsday" alt="Avengers: Doomsday">
-    <div class="card-content">
-      <span class="badge">Movie</span>
-      <h3>Avengers: Doomsday (2026)</h3>
-      <p>The ultimate battle of heroes against the multiverse threat.</p>
-    </div>
-  </div>
-
-</div>
 </main>
 
-<footer>
-  <p>MCU Timeline Website | Created by ChatGPT | Placeholder images used</p>
+<footer style="text-align:center;padding:24px;background:transparent;color:#bbb;font-size:0.9rem">
+  IT'S ENDLESS
 </footer>
 
 <script>
-  const toggleBtn = document.getElementById('toggleMode');
-  const timeline = document.getElementById('timeline');
-  const cardMode = document.getElementById('cardMode');
+/* ================= DATA (movies + series) - keep filenames as you have them */
+const data = [
+  { id:2,  title:"Captain America: The First Avenger", type:"movie", year:1943, image:"Captain_America_The_First_Avenger.jpg", trailerId:"JerVrbLldXw", desc:"Steve Rogers becomes the first super soldier.", extra:{cast:"Chris Evans"} },
+  { id:3,  title:"Captain Marvel", type:"movie", year:1995, image:"Captain_Marvel.jpg", trailerId:"Z1BCujX3pw8", desc:"Carol Danvers becomes one of the universe's most powerful heroes.", extra:{cast:"Brie Larson"} },
+  { id:4,  title:"Iron Man", type:"movie", year:2008, image:"Iron_Man.jpg", trailerId:"8ugaeA-nMTc", desc:"Tony Stark builds his first armored suit.", extra:{cast:"Robert Downey Jr."} },
+  { id:5,  title:"Iron Man 2", type:"movie", year:2010, image:"Iron_Man_2.jpg", trailerId:"wKtcmiifycU", desc:"Tony faces new threats while dealing with his health.", extra:{cast:"Robert Downey Jr."} },
+  { id:6,  title:"The Incredible Hulk", type:"movie", year:2010, image:"The_Incredible_Hulk.jpg", trailerId:"xbqNb2PFKKA", desc:"Bruce Banner evades the military while controlling his rage.", extra:{cast:"Edward Norton"} },
+  { id:7,  title:"Thor", type:"movie", year:2010, image:"Thor.jpg", trailerId:"JOddp-nlNvQ", desc:"Thor is banished to Earth and learns humility.", extra:{cast:"Chris Hemsworth"} },
+  { id:8,  title:"The Avengers", type:"movie", year:2012, image:"The_Avengers.jpg", trailerId:"eOrNdBpGMv8", desc:"Earth's mightiest heroes assemble against Loki.", extra:{cast:"Ensemble"} },
+  { id:9,  title:"Iron Man 3", type:"movie", year:2013, image:"Iron_Man_3.jpg", trailerId:"Ke1Y3P9D0Bc", desc:"Tony battles trauma and the Mandarin.", extra:{cast:"Robert Downey Jr."} },
+  { id:11, title:"Captain America: The Winter Soldier", type:"movie", year:2014, image:"Captain_America_The_Winter_Soldier.jpg", trailerId:"zqJmib8P6uA", desc:"Cap uncovers conspiracy within S.H.I.E.L.D.", extra:{cast:"Chris Evans"} },
+  { id:12, title:"Guardians of the Galaxy", type:"movie", year:2014, image:"Guardians_of_the_Galaxy.jpg", trailerId:"2gUtfBmw86Y", desc:"A ragtag team protects an orb from Ronan.", extra:{cast:"Chris Pratt"} },
+  { id:13, title:"Avengers: Age of Ultron", type:"movie", year:2015, image:"Avengers_Age_of_Ultron.jpg", trailerId:"tmeOjFno6Do", desc:"The Avengers face an AI they created.", extra:{cast:"Ensemble"} },
+  { id:14, title:"Ant-Man", type:"movie", year:2015, image:"Ant-Man.jpg", trailerId:"pWdKf3MneyI", desc:"Scott Lang becomes the shrinking hero.", extra:{cast:"Paul Rudd"} },
+  { id:15, title:"Captain America: Civil War", type:"movie", year:2016, image:"Captain_America_Civil_War.jpg", trailerId:"dKrVegVI0Us", desc:"The Avengers divide over government oversight.", extra:{cast:"Ensemble"} },
+  { id:17, title:"Spider-Man: Homecoming", type:"movie", year:2016, image:"Spider-Man_Homecoming.jpg", trailerId:"U0D3AOldjMU", desc:"Peter balances high school and hero duties.", extra:{cast:"Tom Holland"} },
+  { id:18, title:"Doctor Strange", type:"movie", year:2016, image:"Doctor_Strange.jpg", trailerId:"HSzx-zryEgM", desc:"Stephen Strange masters the mystic arts.", extra:{cast:"Benedict Cumberbatch"} },
+  { id:19, title:"Black Panther", type:"movie", year:2016, image:"Black_Panther.jpg", trailerId:"xjDjIWPwcPU", desc:"T'Challa becomes king of Wakanda.", extra:{cast:"Chadwick Boseman"} },
+  { id:20, title:"Thor: Ragnarok", type:"movie", year:2017, image:"Thor_Ragnarok.jpg", trailerId:"ue80QwXMRHg", desc:"Thor fights to save Asgard from destruction.", extra:{cast:"Chris Hemsworth"} },
+  { id:21, title:"Guardians of the Galaxy Vol. 2", type:"movie", year:2014, image:"Guardians_of_the_Galaxy_Vol._2.jpg", trailerId:"d96cjJhvlMA", desc:"The team explores Star-Lord's parentage.", extra:{cast:"Chris Pratt"} },
+  { id:22, title:"Ant-Man and the Wasp", type:"movie", year:2018, image:"Ant-Man_and_the_Wasp.jpg", trailerId:"pWdKf3MneyI", desc:"Scott and Hope explore the Quantum Realm.", extra:{cast:"Paul Rudd"} },
+  { id:23, title:"Avengers: Infinity War", type:"movie", year:2018, image:"Avengers_Infinity_War.jpg", trailerId:"6ZfuNTqbHE8", desc:"Thanos collects the Infinity Stones.", extra:{cast:"Ensemble"} },
+  { id:24, title:"Avengers: Endgame", type:"movie", year:2023, image:"Avengers_Endgame.jpg", trailerId:"TcMBFSGVi1c", desc:"The Avengers attempt to reverse the Snap.", extra:{cast:"Ensemble"} },
+  { id:25, title:"WandaVision", type:"series", year:2023, image:"WandaVision.jpg", trailerId:"sEJbH04aCfw", desc:"Wanda and Vision live idealized suburban lives.", extra:{cast:"Elizabeth Olsen"} },
+  { id:26, title:"The Falcon and the Winter Soldier", type:"series", year:2024, image:"The_Falcon_and_the_Winter_Soldier.jpg", trailerId:"pZs7x0Y1z2c", desc:"Sam and Bucky confront a new Captain America.", extra:{cast:"Anthony Mackie"} },
+  { id:27, title:"Spider-Man: Far From Home", type:"movie", year:2024, image:"Spider-Man_Far_From_Home.jpg", trailerId:"2HkjP4p1M6k", desc:"Peter vacations in Europe while facing Mysterio.", extra:{cast:"Tom Holland"} },
+  { id:28, title:"Shang-Chi and the Legend of the Ten Rings", type:"movie", year:2024, image:"Shang-Chi_and_the_Legend_of_the_Ten_Rings.jpg", trailerId:"8YjFbMbfXaQ", desc:"Shang-Chi confronts his father's organization.", extra:{cast:"Simu Liu"} },
+  { id:29, title:"Spider-Man: No Way Home", type:"movie", year:2024, image:"Spider-Man_No_Way_Home.jpg", trailerId:"JfVOs4VSpmA", desc:"Multiversal villains threaten Peter's world.", extra:{cast:"Tom Holland"} },
+  { id:30, title:"Hawkeye", type:"series", year:2024, image:"Hawkeye.jpg", trailerId:"1pBl6AWP9lE", desc:"Clint Barton mentors Kate Bishop at Christmas.", extra:{cast:"Jeremy Renner"} },
+  { id:31, title:"Loki", type:"series", year:2012, image:"Loki.jpg", trailerId:"vvjzHM4rQZ0", desc:"Loki navigates the TVA across timelines.", extra:{cast:"Tom Hiddleston"} },
+  { id:32, title:"What If...?", type:"series", year:0, image:"What_If....jpg", trailerId:"dZ3A3eGk47A", desc:"Animated alternate MCU realities.", extra:{cast:"Jeffrey Wright"} },
+  { id:33, title:"Moon Knight", type:"series", year:2025, image:"Moon_Knight.jpg", trailerId:"YP0b6k6nUqg", desc:"Marc Spector embraces Egyptian god powers.", extra:{cast:"Oscar Isaac"} },
+  { id:34, title:"Doctor Strange in the Multiverse of Madness", type:"movie", year:2024, image:"Doctor_Strange_in_the_Multiverse_of_Madness.jpg", trailerId:"aWzlQ2N6qqg", desc:"Strange faces multiversal threats.", extra:{cast:"Benedict Cumberbatch"} },
+  { id:35, title:"Ms. Marvel", type:"series", year:2025, image:"Ms._Marvel.jpg", trailerId:"m5qfm2vNTo4", desc:"Kamala Khan discovers her cosmic powers.", extra:{cast:"Iman Vellani"} },
+  { id:36, title:"Thor: Love and Thunder", type:"movie", year:2025, image:"Thor_Love_and_Thunder.webp", trailerId:"Go8nTmfrQd8", desc:"Thor teams with mighty allies against Gorr.", extra:{cast:"Chris Hemsworth"} },
+  { id:37, title:"She-Hulk: Attorney at Law", type:"series", year:2025, image:"She-Hulk_Attorney_at_Law.jpg", trailerId:"c3x0wfX3RCE", desc:"Jennifer Walters balances law and superpowers.", extra:{cast:"Tatiana Maslany"} },
+  { id:38, title:"Black Panther: Wakanda Forever", type:"movie", year:2025, image:"Black_Panther.jpg", trailerId:"GJJ1hn8bhQo", desc:"Wakanda defends itself from new threats.", extra:{cast:"Letitia Wright"} },
+  { id:39, title:"Werewolf by Night", type:"special", year:2025, image:"Werewolf_By_Night.webp", trailerId:"", desc:"A monstrous MCU Halloween special.", extra:{cast:"Gael García Bernal"} },
+  { id:40, title:"Ant-Man and the Wasp: Quantumania", type:"movie", year:2026, image:"Ant-Man_and_the_Wasp_Quantumania.jpg", trailerId:"D1YxGv3S0tU", desc:"The family explores the Quantum Realm and meets Kang.", extra:{cast:"Paul Rudd"} },
+  { id:41, title:"Guardians of the Galaxy Vol. 3", type:"movie", year:2026, image:"Guardians_of_the_Galaxy_Vol._3.jpg", trailerId:"wQ7HfLQjXf0", desc:"The Guardians fight to save one of their own.", extra:{cast:"Chris Pratt"} },
+  { id:42, title:"Secret Invasion", type:"series", year:2026, image:"Secret_Invasion.jpg", trailerId:"", desc:"Nick Fury uncovers a Skrull infiltration.", extra:{cast:"Samuel L. Jackson"} },
+  { id:43, title:"The Marvels", type:"movie", year:2026, image:"The_Marvels.jpg", trailerId:"", desc:"Carol, Monica, and Kamala team up.", extra:{cast:"Brie Larson"} },
+  { id:44, title:"Echo", type:"series", year:2026, image:"Echo.jpg", trailerId:"", desc:"Maya Lopez confronts her past.", extra:{cast:"Alaqua Cox"} },
+  { id:45, title:"Agatha: All Along", type:"series", year:2026, image:"Agatha_All_Along.jpg", trailerId:"", desc:"Agatha Harkness regains her powers.", extra:{cast:"Kathryn Hahn"} },
+  { id:46, title:"Deadpool & Wolverine", type:"movie", year:2026, image:"Deadpool_and_Wolverine.webp", trailerId:"", desc:"Deadpool recruits Wolverine for a multiversal mission.", extra:{cast:"Ryan Reynolds, Hugh Jackman"} },
+  { id:47, title:"Captain America: Brave New World", type:"movie", year:2027, image:"Captain_America_Brave_New_World.jpg", trailerId:"", desc:"Sam Wilson faces international threats.", extra:{cast:"Anthony Mackie"} },
+  { id:48, title:"Thunderbolts*", type:"movie", year:2027, image:"Thunderbolts.jpg", trailerId:"", desc:"Anti-heroes on a dangerous mission.", extra:{cast:"Ensemble"} },
+  { id:49, title:"Daredevil: Born Again", type:"series", year:2027, image:"Daredevil_Born_Again.jpg", trailerId:"", desc:"Matt Murdock returns to protect Hell's Kitchen.", extra:{cast:"Charlie Cox"} },
+  { id:50, title:"The Fantastic Four: First Steps", type:"movie", year:2028, image:"Fantastic_Four.jpg", trailerId:"", desc:"Marvel's First Family begins their adventure.", extra:{cast:"Pedro Pascal, Vanessa Kirby"} },
+  { id:51, title:"Avengers: Doomsday", type:"movie", year:2029, image:"Avengers_Doomsday.jpg", trailerId:"", desc:"The Avengers face Doctor Doom.", extra:{cast:"Ensemble, Robert Downey Jr."} }
+];
 
-  // Default to timeline mode
-  timeline.style.display = 'block';
+/* ========== Sort chronologically by in-universe year then id ========== */
+const sortedData = [...data].sort((a,b)=>{
+  if (a.year === b.year) return a.id - b.id;
+  return a.year - b.year;
+});
 
-  toggleBtn.addEventListener('click', () => {
-    if(timeline.style.display === 'block'){
-      timeline.style.display = 'none';
-      cardMode.style.display = 'grid';
-      toggleBtn.innerText = 'Switch to Timeline Mode';
-    } else {
-      timeline.style.display = 'block';
-      cardMode.style.display = 'none';
-      toggleBtn.innerText = 'Switch to Card Mode';
-    }
+/* DOM refs */
+const timelineContainer = document.getElementById('timeline');
+const cardGrid = document.getElementById('cardGrid');
+const searchInput = document.getElementById('searchInput');
+const gridToggle = document.getElementById('gridToggle');
+const doomsdayContainer = document.getElementById('doomsdayContainer');
+const doomsdayTimer = document.getElementById('doomsdayTimer');
+
+let currentTypeFilter = 'all';
+let currentQuery = '';
+let showingGrid = false;
+
+/* YouTube embed helper (muted autoplay for hover) */
+function youtubeEmbedSrcFor(item){
+  if (item.trailerId) {
+    return `https://www.youtube.com/embed/${item.trailerId}?autoplay=1&playsinline=1&rel=0&controls=1&mute=1`;
+  } else {
+    const q = encodeURIComponent(item.title + ' official trailer');
+    return `https://www.youtube.com/embed?listType=search&list=${q}&autoplay=1&playsinline=1&rel=0&controls=1&mute=1`;
+  }
+}
+
+/* Render timeline + grid (no phase text anywhere) */
+function renderAll(){
+  timelineContainer.innerHTML = '<div class="timeline-line"></div><div class="timeline-fill"></div>';
+  cardGrid.innerHTML = '';
+
+  sortedData.forEach((item, idx)=>{
+    const isLeft = idx % 2 === 0;
+    const wrapper = document.createElement('div');
+    wrapper.className = `timeline-item ${isLeft ? 'left' : 'right'}`;
+    wrapper.dataset.id = item.id;
+
+    const card = document.createElement('div'); card.className = 'timeline-card';
+    const poster = document.createElement('div'); poster.className = 'poster';
+    const img = document.createElement('img'); img.src = `wallpapers/${item.image}`; img.alt = item.title; img.loading = 'lazy';
+    poster.appendChild(img);
+    const iframe = document.createElement('iframe'); iframe.title = item.title + ' trailer'; iframe.allow='autoplay; encrypted-media; picture-in-picture'; iframe.style.opacity='0'; iframe.style.pointerEvents='none';
+    poster.appendChild(iframe);
+
+    const content = document.createElement('div'); content.className = 'timeline-content';
+    const yearText = item.year === 0 ? 'Timeless' : item.year;
+    content.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;justify-content:space-between"><div><span class="badge">${item.type.charAt(0).toUpperCase()+item.type.slice(1)}</span></div></div>
+      <h3>${item.title}</h3>
+      <p>${item.desc}</p>
+      <div class="meta">Year: ${yearText} ${item.extra?.cast ? '• Key cast: ' + item.extra.cast : ''}</div>
+      <div style="margin-top:10px;display:flex;gap:10px"><button class="small-btn open-youtube" data-title="${encodeURIComponent(item.title)}">Open on YouTube</button></div>
+    `;
+
+    if (isLeft){ card.appendChild(content); card.appendChild(poster); }
+    else { card.appendChild(poster); card.appendChild(content); }
+
+    wrapper.appendChild(card);
+    timelineContainer.appendChild(wrapper);
+
+    // grid card
+    const gridCard = document.createElement('div');
+    gridCard.className = 'card';
+    gridCard.style.display = 'flex';
+    gridCard.style.flexDirection = 'column';
+    gridCard.style.overflow = 'hidden';
+    gridCard.style.borderRadius = '10px';
+    gridCard.style.background = 'rgba(18,18,18,0.9)';
+    gridCard.innerHTML = `
+      <div style="position:relative;flex:0 0 240px;overflow:hidden;background:#000">
+        <img src="wallpapers/${item.image}" alt="${item.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+        <div style="position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,0.6);padding:8px 10px;border-radius:8px;color:#fff;font-weight:700">Hover to play trailer</div>
+      </div>
+      <div style="padding:14px;display:flex;flex-direction:column;gap:8px">
+        <div><span class="badge">${item.type.charAt(0).toUpperCase()+item.type.slice(1)}</span>
+            <h3 style="margin:8px 0 4px">${item.title}</h3>
+            <div style="color:var(--muted)">${item.desc}</div>
+        </div>
+        <div style="margin-top:auto;color:var(--muted)">Year: ${yearText}</div>
+      </div>
+    `;
+    cardGrid.appendChild(gridCard);
+
+    // hover delayed trailer for timeline poster
+    let hoverTimer=null, playing=false;
+    poster.addEventListener('mouseenter', ()=>{
+      hoverTimer = setTimeout(()=>{
+        iframe.src = youtubeEmbedSrcFor(item);
+        iframe.style.opacity = '1';
+        iframe.style.pointerEvents = 'auto';
+        poster.classList.add('playing');
+        playing = true;
+      }, 600);
+    });
+    poster.addEventListener('mouseleave', ()=>{
+      clearTimeout(hoverTimer); hoverTimer=null;
+      if(playing){
+        try{ iframe.src=''; }catch(e){}
+        iframe.style.opacity='0';
+        iframe.style.pointerEvents='none';
+        poster.classList.remove('playing');
+        playing=false;
+      }
+    });
+
+    // timeline content youtube open
+    content.querySelector('.open-youtube').addEventListener('click', (e)=>{
+      const q = e.target.dataset.title || encodeURIComponent(item.title + ' official trailer');
+      window.open(`https://www.youtube.com/results?search_query=${q}`, '_blank');
+    });
+
+  }); // end foreach
+
+  // grid hover trailer
+  Array.from(cardGrid.children).forEach((gridCard, idx)=>{
+    const posterWrap = gridCard.children[0];
+    const item = sortedData[idx];
+    let gridIframe=null, gTimer=null;
+    posterWrap.addEventListener('mouseenter', ()=>{
+      gTimer = setTimeout(()=> {
+        gridIframe = document.createElement('iframe');
+        gridIframe.allow='autoplay; encrypted-media; picture-in-picture';
+        gridIframe.style.position='absolute'; gridIframe.style.inset='0'; gridIframe.style.width='100%'; gridIframe.style.height='100%'; gridIframe.style.border='0';
+        gridIframe.style.opacity='1';
+        gridIframe.src = youtubeEmbedSrcFor(item);
+        posterWrap.appendChild(gridIframe);
+      },600);
+    });
+    posterWrap.addEventListener('mouseleave', ()=>{
+      clearTimeout(gTimer);
+      if(gridIframe){ try{ gridIframe.remove(); }catch(e){} gridIframe=null; }
+    });
   });
-</script>
 
+  updateConnectorsAndFill();
+}
+
+/* FILTERS & SEARCH (no phases) */
+function applyFilters(){
+  const query = currentQuery.toLowerCase();
+  sortedData.forEach(item=>{
+    let visible = true;
+    if (currentTypeFilter !== 'all' && item.type !== currentTypeFilter) visible = false;
+    if (query){
+      const searchText = `${item.title} ${item.desc} ${item.extra?.cast || ''} ${item.year}`.toLowerCase();
+      if (!searchText.includes(query)) visible = false;
+    }
+    const timelineItem = timelineContainer.querySelector(`.timeline-item[data-id="${item.id}"]`);
+    const gridItem = cardGrid.children[ sortedData.indexOf(item) ];
+    if (timelineItem) timelineItem.style.display = visible ? 'flex' : 'none';
+    if (gridItem) gridItem.style.display = visible ? 'flex' : 'none';
+  });
+
+  updateDoomsdayVisibility();
+  updateConnectorsAndFill();
+}
+
+/* type chips */
+document.querySelectorAll('.chip[data-filter-type]').forEach(chip=>{
+  chip.addEventListener('click', ()=>{
+    document.querySelectorAll('.chip[data-filter-type]').forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    currentTypeFilter = chip.dataset.filterType;
+    applyFilters();
+  });
+});
+searchInput.addEventListener('input', e=>{
+  currentQuery = e.target.value.trim();
+  applyFilters();
+});
+
+/* CONNECTORS and vertical fill */
+let connectorTimer;
+function updateConnectorsAndFill(){
+  document.querySelectorAll('.connector, .connector-dot').forEach(el=>el.remove());
+  const visibleItems = [...timelineContainer.querySelectorAll('.timeline-item')].filter(i=>i.style.display !== 'none');
+  if(!visibleItems.length) return;
+
+  const containerRect = timelineContainer.getBoundingClientRect();
+  const lineRect = timelineContainer.querySelector('.timeline-line').getBoundingClientRect();
+  const centerX = lineRect.left + lineRect.width/2 - containerRect.left;
+  let maxY=0;
+  visibleItems.forEach(item=>{
+    const card = item.querySelector('.timeline-card');
+    const cardRect = card.getBoundingClientRect();
+    const y = (cardRect.top + cardRect.bottom)/2 - containerRect.top;
+    const isLeft = item.classList.contains('left');
+    const edgeX = isLeft ? cardRect.right - containerRect.left : cardRect.left - containerRect.left;
+
+    const connector = document.createElement('div');
+    connector.className='connector';
+    connector.style.position='absolute';
+    connector.style.height='6px';
+    connector.style.left = `${Math.min(centerX, edgeX)}px`;
+    connector.style.top = `${y}px`;
+    connector.style.width = `${Math.abs(centerX - edgeX)}px`;
+    connector.style.background = 'var(--accent)';
+    connector.style.zIndex=3;
+    connector.style.borderRadius='3px';
+    timelineContainer.appendChild(connector);
+
+    const dot = document.createElement('div');
+    dot.className='connector-dot';
+    dot.style.position='absolute';
+    dot.style.width='16px';
+    dot.style.height='16px';
+    dot.style.borderRadius='50%';
+    dot.style.background='#fff';
+    dot.style.border = '4px solid var(--accent)';
+    dot.style.left = `${centerX}px`;
+    dot.style.top = `${y}px`;
+    dot.style.transform = 'translate(-50%,-50%)';
+    dot.style.zIndex = 4;
+    timelineContainer.appendChild(dot);
+
+    maxY = Math.max(maxY, y);
+  });
+
+  const fill = document.querySelector('.timeline-fill');
+  if(fill) fill.style.height = `${maxY + 28}px`;
+}
+function scheduleConnectorUpdate(){ clearTimeout(connectorTimer); connectorTimer = setTimeout(updateConnectorsAndFill, 120); }
+window.addEventListener('resize', scheduleConnectorUpdate);
+window.addEventListener('scroll', scheduleConnectorUpdate);
+
+/* GRID VIEW TOGGLE (icon in same lane as search) */
+gridToggle.addEventListener('click', ()=>{
+  showingGrid = !showingGrid;
+  cardGrid.classList.toggle('active', showingGrid);
+  document.querySelector('.timeline-container').style.display = showingGrid ? 'none' : 'block';
+  gridToggle.classList.toggle('active', showingGrid);
+  gridToggle.setAttribute('aria-pressed', String(showingGrid));
+  // hide timer when in grid
+  updateDoomsdayVisibility();
+  if(!showingGrid) scheduleConnectorUpdate();
+});
+
+/* DOOMSDAY COUNTDOWN (months, days, H:M:S) */
+const targetDate = new Date('December 18, 2026 11:30:00');
+
+function computeTimeUntilMonths(nowDate, target){
+  if (nowDate >= target) return null;
+  let temp = new Date(nowDate.getTime());
+  let months = 0;
+  while(true){
+    const next = new Date(temp.getFullYear(), temp.getMonth()+1, temp.getDate(), temp.getHours(), temp.getMinutes(), temp.getSeconds());
+    if (next <= target){
+      temp = next;
+      months++;
+      if (months > 1200) break;
+    } else break;
+  }
+  const diffMs = target - temp;
+  const days = Math.floor(diffMs / (1000*60*60*24));
+  const hours = Math.floor((diffMs % (1000*60*60*24)) / (1000*60*60));
+  const minutes = Math.floor((diffMs % (1000*60*60)) / (1000*60));
+  const seconds = Math.floor((diffMs % (1000*60)) / 1000);
+  return { months, days, hours, minutes, seconds };
+}
+
+function updateDoomsday(){
+  const now = new Date();
+  const res = computeTimeUntilMonths(now, targetDate);
+  if (!res){ doomsdayTimer.textContent = 'NOW IN THEATERS'; return; }
+  const { months, days, hours, minutes, seconds } = res;
+  const moStr = `${months} month${months !== 1 ? 's' : ''}`;
+  const dStr = `${days}d`;
+  const hStr = `${String(hours).padStart(2,'0')}h`;
+  const mStr = `${String(minutes).padStart(2,'0')}m`;
+  const sStr = `${String(seconds).padStart(2,'0')}s`;
+  doomsdayTimer.textContent = `${moStr} ${dStr} ${hStr} ${mStr} ${sStr}`;
+}
+
+function updateDoomsdayVisibility(){
+  const timelineVisible = document.querySelector('.timeline-container').style.display !== 'none';
+  if (timelineVisible && !showingGrid){
+    doomsdayContainer.style.display = 'flex';
+  } else {
+    doomsdayContainer.style.display = 'none';
+  }
+}
+setInterval(updateDoomsday, 1000);
+updateDoomsday();
+updateDoomsdayVisibility();
+
+/* INIT */
+renderAll();
+applyFilters();
+setTimeout(updateConnectorsAndFill, 300);
+</script>
 </body>
 </html>
