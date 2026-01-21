@@ -3,26 +3,25 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>MCU Chronological Timeline — Grid/Timeline (Mobile Line Fix)</title>
+<title>MCU Chronological Timeline — Grid/Timeline</title>
 <link rel="icon" href="Icon/favicon.webp" type="image/webp" />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#0a0a0b;
-  --panel: rgba(18,18,18,0.86);
+  --panel: rgba(18,18,18,0.92);
   --text:#e9e9e9;
   --muted:#a9a9a9;
   --accent:#ed1d24;
-  --overlay-rgba: 0.66; /* overlay darkness on wallpaper */
+  --overlay-rgba: 0.66;
 }
 
-/* DOOMSDAY WALLPAPER BACKGROUND with overlay */
+/* Background (Doomsday wallpaper) */
 body {
   margin:0;
-  font-family: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-family:"Roboto",system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
   color:var(--text);
   min-height:100vh;
-  /* wallpaper should be in wallpapers/Avengers_Doomsday.jpg */
   background:
     linear-gradient(rgba(0,0,0,var(--overlay-rgba)), rgba(0,0,0,var(--overlay-rgba))),
     url("wallpapers/Avengers_Doomsday.jpg") center/cover no-repeat fixed;
@@ -30,22 +29,23 @@ body {
   -moz-osx-font-smoothing:grayscale;
 }
 
-/* basic reset */
+/* Basic reset */
 *{box-sizing:border-box}
+button{font-family:inherit}
 
-/* header (not sticky) */
+/* Header (not sticky) */
 header{
   position:static;
-  padding:24px 18px;
+  padding:20px 18px;
   display:flex;
   align-items:center;
   justify-content:center;
   gap:16px;
   border-bottom:1px solid rgba(255,255,255,0.04);
 }
-header img.logo{ width:220px; height:auto; display:block }
+.logo{ width:220px; height:auto; display:block }
 
-/* controls row */
+/* Controls row */
 .controls{
   max-width:1200px;
   margin:18px auto;
@@ -57,14 +57,10 @@ header img.logo{ width:220px; height:auto; display:block }
   flex-wrap:wrap;
 }
 
-/* left side (search + grid icon + type filters) */
-.left-controls{
-  display:flex;
-  gap:12px;
-  align-items:center;
-}
+/* Left controls: search + grid toggle + chips */
+.left-controls{ display:flex; gap:12px; align-items:center; }
 
-/* search */
+/* Search */
 .search{
   background:rgba(255,255,255,0.03);
   border-radius:12px;
@@ -85,7 +81,7 @@ header img.logo{ width:220px; height:auto; display:block }
   width:340px;
 }
 
-/* grid toggle button (icon) - placed in same lane as search */
+/* Grid toggle button inline with the search */
 .grid-toggle{
   display:inline-flex;
   align-items:center;
@@ -103,12 +99,20 @@ header img.logo{ width:220px; height:auto; display:block }
   border-color:transparent;
 }
 
-/* type chips (All / Movies / Series / Special) */
+/* Chips (All / Movies / Series / Special) */
 .chips{ display:flex; gap:8px; flex-wrap:wrap; align-items:center }
-.chip{ background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:8px 12px; border-radius:999px; cursor:pointer; font-weight:700; }
+.chip{
+  background:transparent;
+  border:1px solid rgba(255,255,255,0.06);
+  color:var(--muted);
+  padding:8px 12px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:700;
+}
 .chip.active{ background:var(--accent); color:#fff; border-color:transparent; box-shadow:0 6px 18px rgba(237,29,36,0.12); }
 
-/* doomsday timer row */
+/* Doomsday timer row */
 .doomsday{
   max-width:1200px;
   margin:6px auto;
@@ -122,20 +126,20 @@ header img.logo{ width:220px; height:auto; display:block }
 .doomsday .label{ font-weight:700; color:#fff; }
 .doomsday .timer{ font-family:monospace; font-size:1.05rem; color:var(--accent); font-weight:700; }
 
-/* main area */
+/* Main container */
 main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
 
-/* timeline container */
+/* Timeline container */
 .timeline-container{ position:relative; padding:30px 0 60px; }
 
-/* vertical line + fill (desktop) */
+/* Vertical line (desktop) - centered */
 .timeline-line{
   position:absolute;
   left:50%;
   top:0;
-  bottom:0;
   width:6px;
-  background:var(--accent);
+  bottom:0;
+  background:linear-gradient(to bottom,#ff3b30,#ed1d24);
   transform:translateX(-50%);
   border-radius:3px;
   z-index:1;
@@ -145,70 +149,76 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
   position:absolute;
   left:50%;
   width:6px;
-  background:linear-gradient(to bottom, #ff3b30, #ed1d24);
+  top:0;
+  height:0;
+  background:linear-gradient(to bottom,#ff3b30,#ed1d24);
   transform:translateX(-50%);
   border-radius:3px;
   z-index:2;
-  top:0;
-  height:0;
-  transition:height 0.4s ease, width 0.4s ease, left 0.2s ease, transform 0.2s ease;
+  transition:height .35s ease;
 }
 
-/* item */
-.timeline-item{ position:relative; width:50%; padding:10px 20px; margin-bottom:36px; }
-.timeline-item.left{ left:0; display:flex; justify-content:flex-end; }
-.timeline-item.right{ left:50%; display:flex; justify-content:flex-start; }
+/* Each timeline item */
+.timeline-item{ position:relative; display:flex; gap:20px; margin-bottom:36px; align-items:flex-start; }
 
-.timeline-card{ width:calc(100% - 40px); display:flex; background:var(--panel); border-radius:12px; overflow:hidden; box-shadow:0 14px 36px rgba(0,0,0,0.7); transition:transform 0.28s ease, box-shadow 0.28s ease; min-height:220px; }
-.timeline-card:hover{ transform:translateY(-6px); box-shadow:0 28px 60px rgba(0,0,0,0.8); }
+/* Left/right arrangement using order */
+.timeline-item .timeline-card{ width:calc(50% - 40px); background:var(--panel); border-radius:12px; overflow:hidden; box-shadow:0 14px 36px rgba(0,0,0,0.7); position:relative; z-index:3; transition:transform .28s ease; }
+.timeline-item:nth-child(odd) .timeline-card{ margin-left:0; margin-right:auto; }
+.timeline-item:nth-child(even) .timeline-card{ margin-left:auto; margin-right:0; }
 
-/* poster + iframe */
-.poster{ width:45%; flex-shrink:0; position:relative; overflow:hidden; min-height:220px; background:#000; z-index:2; }
+.timeline-card:hover{ transform:translateY(-8px); }
+
+/* Poster area */
+.poster{ width:100%; height:240px; background:#000; position:relative; overflow:hidden; }
 .poster img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease, opacity .45s ease; }
 .poster iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; opacity:0; transition:opacity .45s ease; pointer-events:none; }
 .poster.playing img{ transform:scale(1.04); opacity:0; }
 .poster.playing iframe{ opacity:1; pointer-events:auto; }
 
-/* content */
-.timeline-content{ width:55%; padding:20px 24px; display:flex; flex-direction:column; justify-content:center; gap:8px; z-index:2; }
-.badge{ background:var(--accent); color:#fff; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; display:inline-block; }
-.timeline-content h3{ margin:8px 0 4px; font-size:1.15rem; color:#fff; }
-.timeline-content p{ color:var(--muted); margin-bottom:6px; }
-.meta{ color:var(--muted); font-size:0.92rem; }
+/* Mobile horizontal line (inside each card, below poster) */
+.mobile-poster-line{
+  display:none; /* only visible on mobile */
+  height:6px;
+  background:linear-gradient(90deg,#ff3b30,#ed1d24);
+  width:100%;
+}
 
-/* card-grid */
+/* Content */
+.timeline-content{ padding:16px 20px; color:var(--text); }
+.badge{ background:var(--accent); color:#fff; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; display:inline-block; }
+.timeline-content h3{ margin:8px 0 6px; font-size:1.15rem; }
+.timeline-content p{ margin:0;color:var(--muted) }
+
+/* Grid view (hidden by default) */
 .card-grid{ display:none; margin-top:20px; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; }
 .card-grid.active{ display:grid; }
 
-/* responsive adjustments */
+/* small button */
+.small-btn{ padding:8px 10px; font-size:0.9rem; border-radius:8px; background:#222; color:var(--text); border:1px solid rgba(255,255,255,0.04); cursor:pointer; }
+
+/* responsive: MOBILE layout */
 @media (max-width:900px){
-  /* stacked items full width */
-  .timeline-item{ width:100%; left:0 !important; padding-left:12px; padding-right:12px; }
-  .timeline-item.left{ justify-content:flex-start; }
-  .timeline-card{ flex-direction:column; min-height:320px; background: rgba(18,18,18,0.9); }
-  .poster{ width:100%; height:260px; }
-  .timeline-content{ width:100%; padding:14px; }
-  /* move the line to the bottom (horizontal) so it does not overlap posters */
-  .timeline-line{
-    left:0;
-    right:0;
-    top:auto;
-    bottom:8px;           /* distance from bottom of timeline container */
-    width:auto;
-    height:6px;
-    transform:none;
+
+  /* Hide desktop centered vertical line on mobile */
+  .timeline-line, .timeline-fill{ display:none; }
+
+  .timeline-container{ padding-bottom:60px; }
+
+  .timeline-item{
+    flex-direction:column;
+    align-items:stretch;
   }
-  .timeline-fill{
-    left:0;
-    top:auto;
-    bottom:8px;
-    height:6px;
-    width:0;
-    transform:none;
-  }
-  /* make sure connectors/dots are above line */
-  .connector, .connector-dot{ z-index:3; }
-  .left-controls{ width:100%; gap:8px; }
+
+  .timeline-item .timeline-card{ width:100%; margin:0; }
+
+  /* poster bigger on mobile */
+  .poster{ height:320px; }
+  .timeline-content{ padding:14px; }
+
+  /* show the per-card horizontal red line directly under poster */
+  .mobile-poster-line{ display:block; }
+
+  /* ensure connectors won't overlap (we will skip connector drawing on mobile in JS) */
 }
 </style>
 </head>
@@ -225,10 +235,8 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
       <input id="searchInput" placeholder="Search title, year, actor..." aria-label="Search timeline">
     </div>
 
-    <!-- grid toggle icon (same lane as search) -->
     <button id="gridToggle" class="grid-toggle" title="Toggle grid view" aria-pressed="false" aria-label="Toggle grid view">
-      <!-- grid icon -->
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--muted)">
         <rect x="3" y="3" width="8" height="8" rx="1"></rect>
         <rect x="13" y="3" width="8" height="8" rx="1"></rect>
         <rect x="3" y="13" width="8" height="8" rx="1"></rect>
@@ -256,14 +264,16 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
 </div>
 
 <main>
-  <div id="timelineRoot">
-    <div class="timeline-container" id="timeline"></div>
-    <div class="card-grid" id="cardGrid" aria-hidden="true"></div>
+  <div class="timeline-container" id="timeline">
+    <div class="timeline-line" id="timelineLine"></div>
+    <div class="timeline-fill" id="timelineFill"></div>
   </div>
+
+  <div class="card-grid" id="cardGrid" aria-hidden="true"></div>
 </main>
 
 <footer style="text-align:center;padding:24px;background:transparent;color:#bbb;font-size:0.9rem">
-  IT'S ENDLESS
+  MCU Chronological Timeline
 </footer>
 
 <script>
@@ -319,11 +329,16 @@ const data = [
   { id:51, title:"Avengers: Doomsday", type:"movie", year:2029, image:"Avengers_Doomsday.jpg", trailerId:"", desc:"The Avengers face Doctor Doom.", extra:{cast:"Ensemble, Robert Downey Jr."} }
 ];
 
-/* ========== Sort chronologically by in-universe year then id ========== */
-const sortedData = [...data].sort((a,b)=>{ if (a.year === b.year) return a.id - b.id; return a.year - b.year; });
+/* Sort chronologically (in-universe) */
+const sortedData = [...data].sort((a,b)=>{
+  if (a.year === b.year) return a.id - b.id;
+  return a.year - b.year;
+});
 
 /* DOM refs */
 const timelineContainer = document.getElementById('timeline');
+const timelineLine = document.getElementById('timelineLine');
+const timelineFill = document.getElementById('timelineFill');
 const cardGrid = document.getElementById('cardGrid');
 const searchInput = document.getElementById('searchInput');
 const gridToggle = document.getElementById('gridToggle');
@@ -334,9 +349,9 @@ let currentTypeFilter = 'all';
 let currentQuery = '';
 let showingGrid = false;
 
-/* YouTube embed helper (muted autoplay for hover) */
+/* Youtube embed generator (muted autoplay) */
 function youtubeEmbedSrcFor(item){
-  if (item.trailerId) {
+  if (item.trailerId){
     return `https://www.youtube.com/embed/${item.trailerId}?autoplay=1&playsinline=1&rel=0&controls=1&mute=1`;
   } else {
     const q = encodeURIComponent(item.title + ' official trailer');
@@ -344,41 +359,71 @@ function youtubeEmbedSrcFor(item){
   }
 }
 
-/* Render timeline + grid (no phase text anywhere) */
+/* Render timeline and grid */
 function renderAll(){
-  timelineContainer.innerHTML = '<div class="timeline-line"></div><div class="timeline-fill"></div>';
+  // timeline container already has the line elements
+  // clear any previous items
+  const top = timelineContainer;
+  // remove old items but keep the lines
+  Array.from(top.querySelectorAll('.timeline-item')).forEach(n => n.remove());
   cardGrid.innerHTML = '';
 
-  sortedData.forEach((item, idx)=>{
-    const isLeft = idx % 2 === 0;
+  sortedData.forEach((item, idx) => {
+    // make timeline-item wrapper
     const wrapper = document.createElement('div');
-    wrapper.className = `timeline-item ${isLeft ? 'left' : 'right'}`;
+    wrapper.className = 'timeline-item';
     wrapper.dataset.id = item.id;
 
-    const card = document.createElement('div'); card.className = 'timeline-card';
-    const poster = document.createElement('div'); poster.className = 'poster';
-    const img = document.createElement('img'); img.src = `wallpapers/${item.image}`; img.alt = item.title; img.loading = 'lazy';
+    // card
+    const card = document.createElement('div');
+    card.className = 'timeline-card';
+
+    // poster block
+    const poster = document.createElement('div');
+    poster.className = 'poster';
+    const img = document.createElement('img');
+    img.src = `wallpapers/${item.image}`;
+    img.alt = item.title + ' poster';
+    img.loading = 'lazy';
     poster.appendChild(img);
-    const iframe = document.createElement('iframe'); iframe.title = item.title + ' trailer'; iframe.allow='autoplay; encrypted-media; picture-in-picture'; iframe.style.opacity='0'; iframe.style.pointerEvents='none';
+
+    // iframe for trailer (will be set on hover)
+    const iframe = document.createElement('iframe');
+    iframe.title = item.title + ' trailer';
+    iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+    iframe.style.opacity = '0';
+    iframe.style.pointerEvents = 'none';
     poster.appendChild(iframe);
 
-    const content = document.createElement('div'); content.className = 'timeline-content';
+    // mobile inline horizontal line (shows only on mobile)
+    const mobileLine = document.createElement('div');
+    mobileLine.className = 'mobile-poster-line';
+
+    // content block
+    const content = document.createElement('div');
+    content.className = 'timeline-content';
     const yearText = item.year === 0 ? 'Timeless' : item.year;
     content.innerHTML = `
-      <div style="display:flex;align-items:center;gap:10px;justify-content:space-between"><div><span class="badge">${item.type.charAt(0).toUpperCase()+item.type.slice(1)}</span></div></div>
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div><span class="badge">${item.type.charAt(0).toUpperCase()+item.type.slice(1)}</span></div>
+      </div>
       <h3>${item.title}</h3>
       <p>${item.desc}</p>
-      <div class="meta">Year: ${yearText} ${item.extra?.cast ? '• Key cast: ' + item.extra.cast : ''}</div>
-      <div style="margin-top:10px;display:flex;gap:10px"><button class="small-btn open-youtube" data-title="${encodeURIComponent(item.title)}">Open on YouTube</button></div>
+      <p style="color:var(--muted);margin-top:10px">Year: ${yearText}${item.extra?.cast ? ' • Key cast: ' + item.extra.cast : ''}</p>
+      <div style="margin-top:10px">
+        <button class="small-btn open-youtube" data-title="${encodeURIComponent(item.title)}">Open on YouTube</button>
+      </div>
     `;
 
-    if (isLeft){ card.appendChild(content); card.appendChild(poster); }
-    else { card.appendChild(poster); card.appendChild(content); }
+    // assembly: poster, mobile line, content
+    card.appendChild(poster);
+    card.appendChild(mobileLine);
+    card.appendChild(content);
 
     wrapper.appendChild(card);
-    timelineContainer.appendChild(wrapper);
+    top.appendChild(wrapper);
 
-    // grid card
+    // create grid card
     const gridCard = document.createElement('div');
     gridCard.className = 'card';
     gridCard.style.display = 'flex';
@@ -401,10 +446,14 @@ function renderAll(){
     `;
     cardGrid.appendChild(gridCard);
 
-    // hover delayed trailer for timeline poster
-    let hoverTimer=null, playing=false;
-    poster.addEventListener('mouseenter', ()=>{
-      hoverTimer = setTimeout(()=>{
+    /* Poster hover behavior with gentle delay (600ms) */
+    let hoverTimer = null;
+    let playing = false;
+
+    poster.addEventListener('mouseenter', () => {
+      // only allow hover trailer on desktop/tablet widths (prevent mobile autoplay surprises)
+      if (window.innerWidth <= 900) return;
+      hoverTimer = setTimeout(() => {
         iframe.src = youtubeEmbedSrcFor(item);
         iframe.style.opacity = '1';
         iframe.style.pointerEvents = 'auto';
@@ -412,50 +461,60 @@ function renderAll(){
         playing = true;
       }, 600);
     });
-    poster.addEventListener('mouseleave', ()=>{
-      clearTimeout(hoverTimer); hoverTimer=null;
-      if(playing){
-        try{ iframe.src=''; }catch(e){}
-        iframe.style.opacity='0';
-        iframe.style.pointerEvents='none';
+
+    poster.addEventListener('mouseleave', () => {
+      clearTimeout(hoverTimer);
+      hoverTimer = null;
+      if (playing){
+        try{ iframe.src = ''; } catch(e){}
+        iframe.style.opacity = '0';
+        iframe.style.pointerEvents = 'none';
         poster.classList.remove('playing');
-        playing=false;
+        playing = false;
       }
     });
 
-    // timeline content youtube open
+    // grid card hover trailer (desktop only)
+    (function(gridCardLocal, itemLocal){
+      const posterWrap = gridCardLocal.children[0];
+      let gridIframe = null;
+      let gTimer = null;
+      posterWrap.addEventListener('mouseenter', ()=>{
+        if (window.innerWidth <= 900) return;
+        gTimer = setTimeout(()=> {
+          gridIframe = document.createElement('iframe');
+          gridIframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+          gridIframe.style.position='absolute';
+          gridIframe.style.inset='0';
+          gridIframe.style.width='100%';
+          gridIframe.style.height='100%';
+          gridIframe.style.border='0';
+          gridIframe.style.opacity='1';
+          gridIframe.src = youtubeEmbedSrcFor(itemLocal);
+          posterWrap.appendChild(gridIframe);
+        }, 600);
+      });
+      posterWrap.addEventListener('mouseleave', ()=>{
+        clearTimeout(gTimer);
+        if (gridIframe){
+          try{ gridIframe.remove(); } catch(e){}
+          gridIframe = null;
+        }
+      });
+    })(gridCard, item);
+
+    // fallback open on YouTube
     content.querySelector('.open-youtube').addEventListener('click', (e)=>{
       const q = e.target.dataset.title || encodeURIComponent(item.title + ' official trailer');
       window.open(`https://www.youtube.com/results?search_query=${q}`, '_blank');
     });
 
-  }); // end foreach
-
-  // grid hover trailer
-  Array.from(cardGrid.children).forEach((gridCard, idx)=>{
-    const posterWrap = gridCard.children[0];
-    const item = sortedData[idx];
-    let gridIframe=null, gTimer=null;
-    posterWrap.addEventListener('mouseenter', ()=>{
-      gTimer = setTimeout(()=> {
-        gridIframe = document.createElement('iframe');
-        gridIframe.allow='autoplay; encrypted-media; picture-in-picture';
-        gridIframe.style.position='absolute'; gridIframe.style.inset='0'; gridIframe.style.width='100%'; gridIframe.style.height='100%'; gridIframe.style.border='0';
-        gridIframe.style.opacity='1';
-        gridIframe.src = youtubeEmbedSrcFor(item);
-        posterWrap.appendChild(gridIframe);
-      },600);
-    });
-    posterWrap.addEventListener('mouseleave', ()=>{
-      clearTimeout(gTimer);
-      if(gridIframe){ try{ gridIframe.remove(); }catch(e){} gridIframe=null; }
-    });
-  });
+  }); // end forEach
 
   updateConnectorsAndFill();
 }
 
-/* FILTERS & SEARCH (no phases) */
+/* FILTERS & SEARCH */
 function applyFilters(){
   const query = currentQuery.toLowerCase();
   sortedData.forEach(item=>{
@@ -465,6 +524,7 @@ function applyFilters(){
       const searchText = `${item.title} ${item.desc} ${item.extra?.cast || ''} ${item.year}`.toLowerCase();
       if (!searchText.includes(query)) visible = false;
     }
+    // timeline item
     const timelineItem = timelineContainer.querySelector(`.timeline-item[data-id="${item.id}"]`);
     const gridItem = cardGrid.children[ sortedData.indexOf(item) ];
     if (timelineItem) timelineItem.style.display = visible ? 'flex' : 'none';
@@ -475,149 +535,94 @@ function applyFilters(){
   updateConnectorsAndFill();
 }
 
-/* type chips */
-document.querySelectorAll('.chip[data-filter-type]').forEach(chip=>{
-  chip.addEventListener('click', ()=>{
-    document.querySelectorAll('.chip[data-filter-type]').forEach(c=>c.classList.remove('active'));
+/* chips behavior */
+document.querySelectorAll('.chip[data-filter-type]').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.chip[data-filter-type]').forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
     currentTypeFilter = chip.dataset.filterType;
     applyFilters();
   });
 });
-searchInput.addEventListener('input', e=>{
+searchInput.addEventListener('input', e => {
   currentQuery = e.target.value.trim();
   applyFilters();
 });
 
-/* CONNECTORS and vertical/horizontal fill */
-/* This function handles both desktop vertical line and mobile horizontal bottom line.
-   If the line element is wide (width > height) we treat it as horizontal (mobile).
-*/
+/* CONNECTORS & FILL: run ONLY on desktop widths (>900) */
 let connectorTimer;
 function updateConnectorsAndFill(){
-  document.querySelectorAll('.connector, .connector-dot').forEach(el=>el.remove());
-  const visibleItems = [...timelineContainer.querySelectorAll('.timeline-item')].filter(i=>i.style.display !== 'none');
-  if(!visibleItems.length) {
-    const fill = document.querySelector('.timeline-fill');
-    if (fill) { fill.style.height = '0'; fill.style.width = '0'; }
+  // remove existing connectors
+  document.querySelectorAll('.connector, .connector-dot').forEach(n => n.remove());
+
+  // if mobile, just set vertical fill height to 0 and return early
+  if (window.innerWidth <= 900){
+    if (timelineFill) timelineFill.style.height = '0';
+    return;
+  }
+
+  // desktop: compute connectors and fill
+  const visibleItems = [...timelineContainer.querySelectorAll('.timeline-item')].filter(i => i.style.display !== 'none');
+  if (!visibleItems.length){
+    if (timelineFill) timelineFill.style.height = '0';
     return;
   }
 
   const containerRect = timelineContainer.getBoundingClientRect();
-  const lineEl = timelineContainer.querySelector('.timeline-line');
-  const fillEl = timelineContainer.querySelector('.timeline-fill');
-  if (!lineEl || !fillEl) return;
-  const lineRect = lineEl.getBoundingClientRect();
+  const lineRect = timelineLine.getBoundingClientRect();
+  const centerX = lineRect.left + lineRect.width/2 - containerRect.left;
+  let maxY = 0;
 
-  const isHorizontal = lineRect.width > lineRect.height;
+  visibleItems.forEach(item => {
+    const card = item.querySelector('.timeline-card');
+    const cardRect = card.getBoundingClientRect();
+    const y = (cardRect.top + cardRect.bottom) / 2 - containerRect.top;
 
-  if (!isHorizontal) {
-    // Vertical line behavior (desktop)
-    const centerX = lineRect.left + lineRect.width/2 - containerRect.left;
-    let maxY = 0;
-    visibleItems.forEach(item => {
-      const card = item.querySelector('.timeline-card');
-      const cardRect = card.getBoundingClientRect();
-      const y = (cardRect.top + cardRect.bottom) / 2 - containerRect.top;
-      const isLeft = item.classList.contains('left');
-      const edgeX = isLeft ? cardRect.right - containerRect.left : cardRect.left - containerRect.left;
+    const isLeft = item.classList.contains('left') || (Array.from(timelineContainer.children).indexOf(item) % 2 === 0);
+    const edgeX = isLeft ? cardRect.right - containerRect.left : cardRect.left - containerRect.left;
 
-      const connector = document.createElement('div');
-      connector.className = 'connector';
-      connector.style.position = 'absolute';
-      connector.style.height = '6px';
-      connector.style.left = `${Math.min(centerX, edgeX)}px`;
-      connector.style.top = `${y}px`;
-      connector.style.width = `${Math.abs(centerX - edgeX)}px`;
-      connector.style.background = 'var(--accent)';
-      connector.style.zIndex = 3;
-      connector.style.borderRadius = '3px';
-      timelineContainer.appendChild(connector);
+    // connector bar
+    const connector = document.createElement('div');
+    connector.className = 'connector';
+    connector.style.position = 'absolute';
+    connector.style.height = '6px';
+    connector.style.left = `${Math.min(centerX, edgeX)}px`;
+    connector.style.top = `${y}px`;
+    connector.style.width = `${Math.abs(centerX - edgeX)}px`;
+    connector.style.background = 'var(--accent)';
+    connector.style.zIndex = 2;
+    connector.style.borderRadius = '3px';
+    timelineContainer.appendChild(connector);
 
-      const dot = document.createElement('div');
-      dot.className = 'connector-dot';
-      dot.style.position = 'absolute';
-      dot.style.width = '16px';
-      dot.style.height = '16px';
-      dot.style.borderRadius = '50%';
-      dot.style.background = '#fff';
-      dot.style.border = '4px solid var(--accent)';
-      dot.style.left = `${centerX}px`;
-      dot.style.top = `${y}px`;
-      dot.style.transform = 'translate(-50%,-50%)';
-      dot.style.zIndex = 4;
-      timelineContainer.appendChild(dot);
+    // dot on center
+    const dot = document.createElement('div');
+    dot.className = 'connector-dot';
+    dot.style.position = 'absolute';
+    dot.style.width = '16px';
+    dot.style.height = '16px';
+    dot.style.borderRadius = '50%';
+    dot.style.background = '#fff';
+    dot.style.border = '4px solid var(--accent)';
+    dot.style.left = `${centerX}px`;
+    dot.style.top = `${y}px`;
+    dot.style.transform = 'translate(-50%,-50%)';
+    dot.style.zIndex = 3;
+    timelineContainer.appendChild(dot);
 
-      maxY = Math.max(maxY, y);
-    });
+    maxY = Math.max(maxY, y);
+  });
 
-    if (fillEl) {
-      fillEl.style.left = '50%';
-      fillEl.style.transform = 'translateX(-50%)';
-      fillEl.style.width = '6px';
-      fillEl.style.height = `${maxY + 28}px`;
-    }
-  } else {
-    // Horizontal bottom-line behavior (mobile)
-    const centerY = lineRect.top + lineRect.height/2 - containerRect.top;
-    let maxX = 0;
-    visibleItems.forEach(item => {
-      const card = item.querySelector('.timeline-card');
-      const cardRect = card.getBoundingClientRect();
-      // use horizontal center of the card as x coordinate
-      const centerXItem = (cardRect.left + cardRect.right) / 2 - containerRect.left;
-      // start from card bottom to the line's centerY
-      const startY = cardRect.bottom - containerRect.top;
-      const top = Math.min(startY, centerY);
-      const height = Math.abs(centerY - startY);
-
-      const connector = document.createElement('div');
-      connector.className = 'connector';
-      connector.style.position = 'absolute';
-      connector.style.width = '6px';
-      connector.style.left = `${centerXItem}px`;
-      connector.style.top = `${top}px`;
-      connector.style.height = `${height}px`;
-      connector.style.background = 'var(--accent)';
-      connector.style.zIndex = 3;
-      connector.style.borderRadius = '3px';
-      connector.style.transform = 'translateX(-50%)';
-      timelineContainer.appendChild(connector);
-
-      const dot = document.createElement('div');
-      dot.className = 'connector-dot';
-      dot.style.position = 'absolute';
-      dot.style.width = '16px';
-      dot.style.height = '16px';
-      dot.style.borderRadius = '50%';
-      dot.style.background = '#fff';
-      dot.style.border = '4px solid var(--accent)';
-      dot.style.left = `${centerXItem}px`;
-      dot.style.top = `${centerY}px`;
-      dot.style.transform = 'translate(-50%,-50%)';
-      dot.style.zIndex = 4;
-      timelineContainer.appendChild(dot);
-
-      maxX = Math.max(maxX, centerXItem);
-    });
-
-    // set fill width from left edge to maxX (so red fill grows horizontally)
-    if (fillEl) {
-      fillEl.style.left = '0';
-      fillEl.style.transform = 'none';
-      fillEl.style.height = `${lineRect.height}px`;
-      // ensure a minimum width so it's visible; clamp to container width
-      const w = Math.min(Math.max(maxX + 28, 6), containerRect.width);
-      fillEl.style.width = `${w}px`;
-    }
-  }
+  if (timelineFill) timelineFill.style.height = `${maxY + 28}px`;
 }
 
-function scheduleConnectorUpdate(){ clearTimeout(connectorTimer); connectorTimer = setTimeout(updateConnectorsAndFill, 120); }
+function scheduleConnectorUpdate(){
+  clearTimeout(connectorTimer);
+  connectorTimer = setTimeout(updateConnectorsAndFill, 120);
+}
 window.addEventListener('resize', scheduleConnectorUpdate);
 window.addEventListener('scroll', scheduleConnectorUpdate);
 
-/* GRID VIEW TOGGLE (icon in same lane as search) */
+/* GRID TOGGLE (inline with search) */
 gridToggle.addEventListener('click', ()=>{
   showingGrid = !showingGrid;
   cardGrid.classList.toggle('active', showingGrid);
@@ -625,17 +630,17 @@ gridToggle.addEventListener('click', ()=>{
   gridToggle.classList.toggle('active', showingGrid);
   gridToggle.setAttribute('aria-pressed', String(showingGrid));
   updateDoomsdayVisibility();
-  if(!showingGrid) scheduleConnectorUpdate();
+  if (!showingGrid) scheduleConnectorUpdate();
 });
 
-/* DOOMSDAY COUNTDOWN (months, days, H:M:S) */
+/* DOOMSDAY COUNTDOWN (months, days, hours, minutes, seconds) */
 const targetDate = new Date('December 18, 2026 11:30:00');
 
 function computeTimeUntilMonths(nowDate, target){
   if (nowDate >= target) return null;
   let temp = new Date(nowDate.getTime());
   let months = 0;
-  while(true){
+  while (true){
     const next = new Date(temp.getFullYear(), temp.getMonth()+1, temp.getDate(), temp.getHours(), temp.getMinutes(), temp.getSeconds());
     if (next <= target){
       temp = next;
@@ -654,7 +659,10 @@ function computeTimeUntilMonths(nowDate, target){
 function updateDoomsday(){
   const now = new Date();
   const res = computeTimeUntilMonths(now, targetDate);
-  if (!res){ doomsdayTimer.textContent = 'NOW IN THEATERS'; return; }
+  if (!res){
+    doomsdayTimer.textContent = 'NOW IN THEATERS';
+    return;
+  }
   const { months, days, hours, minutes, seconds } = res;
   const moStr = `${months} month${months !== 1 ? 's' : ''}`;
   const dStr = `${days}d`;
@@ -664,13 +672,11 @@ function updateDoomsday(){
   doomsdayTimer.textContent = `${moStr} ${dStr} ${hStr} ${mStr} ${sStr}`;
 }
 
+/* Timer visibility: only show on main timeline (not grid) */
 function updateDoomsdayVisibility(){
   const timelineVisible = document.querySelector('.timeline-container').style.display !== 'none';
-  if (timelineVisible && !showingGrid){
-    doomsdayContainer.style.display = 'flex';
-  } else {
-    doomsdayContainer.style.display = 'none';
-  }
+  if (timelineVisible && !showingGrid) doomsdayContainer.style.display = 'flex';
+  else doomsdayContainer.style.display = 'none';
 }
 setInterval(updateDoomsday, 1000);
 updateDoomsday();
