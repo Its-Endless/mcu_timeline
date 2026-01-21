@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>MCU Chronological Timeline — Grid/Timeline</title>
+<title>MCU Chronological Timeline — Grid/Timeline (Mobile Line Fix)</title>
 <link rel="icon" href="Icon/favicon.webp" type="image/webp" />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -128,9 +128,31 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
 /* timeline container */
 .timeline-container{ position:relative; padding:30px 0 60px; }
 
-/* vertical line + fill */
-.timeline-line{ position:absolute; left:50%; top:0; bottom:0; width:6px; background:var(--accent); transform:translateX(-50%); border-radius:3px; z-index:1; box-shadow:0 0 20px rgba(237,29,36,0.12); }
-.timeline-fill{ position:absolute; left:50%; width:6px; background:linear-gradient(to bottom, #ff3b30, #ed1d24); transform:translateX(-50%); border-radius:3px; z-index:2; top:0; height:0; transition:height 0.4s ease; }
+/* vertical line + fill (desktop) */
+.timeline-line{
+  position:absolute;
+  left:50%;
+  top:0;
+  bottom:0;
+  width:6px;
+  background:var(--accent);
+  transform:translateX(-50%);
+  border-radius:3px;
+  z-index:1;
+  box-shadow:0 0 20px rgba(237,29,36,0.12);
+}
+.timeline-fill{
+  position:absolute;
+  left:50%;
+  width:6px;
+  background:linear-gradient(to bottom, #ff3b30, #ed1d24);
+  transform:translateX(-50%);
+  border-radius:3px;
+  z-index:2;
+  top:0;
+  height:0;
+  transition:height 0.4s ease, width 0.4s ease, left 0.2s ease, transform 0.2s ease;
+}
 
 /* item */
 .timeline-item{ position:relative; width:50%; padding:10px 20px; margin-bottom:36px; }
@@ -141,14 +163,14 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
 .timeline-card:hover{ transform:translateY(-6px); box-shadow:0 28px 60px rgba(0,0,0,0.8); }
 
 /* poster + iframe */
-.poster{ width:45%; flex-shrink:0; position:relative; overflow:hidden; min-height:220px; background:#000; }
+.poster{ width:45%; flex-shrink:0; position:relative; overflow:hidden; min-height:220px; background:#000; z-index:2; }
 .poster img{ width:100%; height:100%; object-fit:cover; display:block; transition:transform .6s ease, opacity .45s ease; }
 .poster iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; opacity:0; transition:opacity .45s ease; pointer-events:none; }
 .poster.playing img{ transform:scale(1.04); opacity:0; }
 .poster.playing iframe{ opacity:1; pointer-events:auto; }
 
 /* content */
-.timeline-content{ width:55%; padding:20px 24px; display:flex; flex-direction:column; justify-content:center; gap:8px; }
+.timeline-content{ width:55%; padding:20px 24px; display:flex; flex-direction:column; justify-content:center; gap:8px; z-index:2; }
 .badge{ background:var(--accent); color:#fff; padding:6px 12px; border-radius:999px; font-size:0.8rem; font-weight:700; display:inline-block; }
 .timeline-content h3{ margin:8px 0 4px; font-size:1.15rem; color:#fff; }
 .timeline-content p{ color:var(--muted); margin-bottom:6px; }
@@ -160,11 +182,32 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
 
 /* responsive adjustments */
 @media (max-width:900px){
-  .timeline-item{ width:100%; left:0 !important; padding-left:72px; }
-  .timeline-card{ flex-direction:column; min-height:340px; }
-  .poster{ width:100%; height:240px; }
-  .timeline-content{ width:100%; }
-  .timeline-line, .timeline-fill{ left:36px; transform:none; }
+  /* stacked items full width */
+  .timeline-item{ width:100%; left:0 !important; padding-left:12px; padding-right:12px; }
+  .timeline-item.left{ justify-content:flex-start; }
+  .timeline-card{ flex-direction:column; min-height:320px; background: rgba(18,18,18,0.9); }
+  .poster{ width:100%; height:260px; }
+  .timeline-content{ width:100%; padding:14px; }
+  /* move the line to the bottom (horizontal) so it does not overlap posters */
+  .timeline-line{
+    left:0;
+    right:0;
+    top:auto;
+    bottom:8px;           /* distance from bottom of timeline container */
+    width:auto;
+    height:6px;
+    transform:none;
+  }
+  .timeline-fill{
+    left:0;
+    top:auto;
+    bottom:8px;
+    height:6px;
+    width:0;
+    transform:none;
+  }
+  /* make sure connectors/dots are above line */
+  .connector, .connector-dot{ z-index:3; }
   .left-controls{ width:100%; gap:8px; }
 }
 </style>
@@ -201,7 +244,6 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
     </div>
   </div>
 
-  <!-- keep right side empty for now (timer is below) -->
   <div style="min-width:120px;"></div>
 </div>
 
@@ -225,7 +267,7 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
 </footer>
 
 <script>
-/* ================= DATA (movies + series) - keep filenames as you have them */
+/* ================= DATA (movies + series) */
 const data = [
   { id:2,  title:"Captain America: The First Avenger", type:"movie", year:1943, image:"Captain_America_The_First_Avenger.jpg", trailerId:"JerVrbLldXw", desc:"Steve Rogers becomes the first super soldier.", extra:{cast:"Chris Evans"} },
   { id:3,  title:"Captain Marvel", type:"movie", year:1995, image:"Captain_Marvel.jpg", trailerId:"Z1BCujX3pw8", desc:"Carol Danvers becomes one of the universe's most powerful heroes.", extra:{cast:"Brie Larson"} },
@@ -278,10 +320,7 @@ const data = [
 ];
 
 /* ========== Sort chronologically by in-universe year then id ========== */
-const sortedData = [...data].sort((a,b)=>{
-  if (a.year === b.year) return a.id - b.id;
-  return a.year - b.year;
-});
+const sortedData = [...data].sort((a,b)=>{ if (a.year === b.year) return a.id - b.id; return a.year - b.year; });
 
 /* DOM refs */
 const timelineContainer = document.getElementById('timeline');
@@ -450,56 +489,130 @@ searchInput.addEventListener('input', e=>{
   applyFilters();
 });
 
-/* CONNECTORS and vertical fill */
+/* CONNECTORS and vertical/horizontal fill */
+/* This function handles both desktop vertical line and mobile horizontal bottom line.
+   If the line element is wide (width > height) we treat it as horizontal (mobile).
+*/
 let connectorTimer;
 function updateConnectorsAndFill(){
   document.querySelectorAll('.connector, .connector-dot').forEach(el=>el.remove());
   const visibleItems = [...timelineContainer.querySelectorAll('.timeline-item')].filter(i=>i.style.display !== 'none');
-  if(!visibleItems.length) return;
+  if(!visibleItems.length) {
+    const fill = document.querySelector('.timeline-fill');
+    if (fill) { fill.style.height = '0'; fill.style.width = '0'; }
+    return;
+  }
 
   const containerRect = timelineContainer.getBoundingClientRect();
-  const lineRect = timelineContainer.querySelector('.timeline-line').getBoundingClientRect();
-  const centerX = lineRect.left + lineRect.width/2 - containerRect.left;
-  let maxY=0;
-  visibleItems.forEach(item=>{
-    const card = item.querySelector('.timeline-card');
-    const cardRect = card.getBoundingClientRect();
-    const y = (cardRect.top + cardRect.bottom)/2 - containerRect.top;
-    const isLeft = item.classList.contains('left');
-    const edgeX = isLeft ? cardRect.right - containerRect.left : cardRect.left - containerRect.left;
+  const lineEl = timelineContainer.querySelector('.timeline-line');
+  const fillEl = timelineContainer.querySelector('.timeline-fill');
+  if (!lineEl || !fillEl) return;
+  const lineRect = lineEl.getBoundingClientRect();
 
-    const connector = document.createElement('div');
-    connector.className='connector';
-    connector.style.position='absolute';
-    connector.style.height='6px';
-    connector.style.left = `${Math.min(centerX, edgeX)}px`;
-    connector.style.top = `${y}px`;
-    connector.style.width = `${Math.abs(centerX - edgeX)}px`;
-    connector.style.background = 'var(--accent)';
-    connector.style.zIndex=3;
-    connector.style.borderRadius='3px';
-    timelineContainer.appendChild(connector);
+  const isHorizontal = lineRect.width > lineRect.height;
 
-    const dot = document.createElement('div');
-    dot.className='connector-dot';
-    dot.style.position='absolute';
-    dot.style.width='16px';
-    dot.style.height='16px';
-    dot.style.borderRadius='50%';
-    dot.style.background='#fff';
-    dot.style.border = '4px solid var(--accent)';
-    dot.style.left = `${centerX}px`;
-    dot.style.top = `${y}px`;
-    dot.style.transform = 'translate(-50%,-50%)';
-    dot.style.zIndex = 4;
-    timelineContainer.appendChild(dot);
+  if (!isHorizontal) {
+    // Vertical line behavior (desktop)
+    const centerX = lineRect.left + lineRect.width/2 - containerRect.left;
+    let maxY = 0;
+    visibleItems.forEach(item => {
+      const card = item.querySelector('.timeline-card');
+      const cardRect = card.getBoundingClientRect();
+      const y = (cardRect.top + cardRect.bottom) / 2 - containerRect.top;
+      const isLeft = item.classList.contains('left');
+      const edgeX = isLeft ? cardRect.right - containerRect.left : cardRect.left - containerRect.left;
 
-    maxY = Math.max(maxY, y);
-  });
+      const connector = document.createElement('div');
+      connector.className = 'connector';
+      connector.style.position = 'absolute';
+      connector.style.height = '6px';
+      connector.style.left = `${Math.min(centerX, edgeX)}px`;
+      connector.style.top = `${y}px`;
+      connector.style.width = `${Math.abs(centerX - edgeX)}px`;
+      connector.style.background = 'var(--accent)';
+      connector.style.zIndex = 3;
+      connector.style.borderRadius = '3px';
+      timelineContainer.appendChild(connector);
 
-  const fill = document.querySelector('.timeline-fill');
-  if(fill) fill.style.height = `${maxY + 28}px`;
+      const dot = document.createElement('div');
+      dot.className = 'connector-dot';
+      dot.style.position = 'absolute';
+      dot.style.width = '16px';
+      dot.style.height = '16px';
+      dot.style.borderRadius = '50%';
+      dot.style.background = '#fff';
+      dot.style.border = '4px solid var(--accent)';
+      dot.style.left = `${centerX}px`;
+      dot.style.top = `${y}px`;
+      dot.style.transform = 'translate(-50%,-50%)';
+      dot.style.zIndex = 4;
+      timelineContainer.appendChild(dot);
+
+      maxY = Math.max(maxY, y);
+    });
+
+    if (fillEl) {
+      fillEl.style.left = '50%';
+      fillEl.style.transform = 'translateX(-50%)';
+      fillEl.style.width = '6px';
+      fillEl.style.height = `${maxY + 28}px`;
+    }
+  } else {
+    // Horizontal bottom-line behavior (mobile)
+    const centerY = lineRect.top + lineRect.height/2 - containerRect.top;
+    let maxX = 0;
+    visibleItems.forEach(item => {
+      const card = item.querySelector('.timeline-card');
+      const cardRect = card.getBoundingClientRect();
+      // use horizontal center of the card as x coordinate
+      const centerXItem = (cardRect.left + cardRect.right) / 2 - containerRect.left;
+      // start from card bottom to the line's centerY
+      const startY = cardRect.bottom - containerRect.top;
+      const top = Math.min(startY, centerY);
+      const height = Math.abs(centerY - startY);
+
+      const connector = document.createElement('div');
+      connector.className = 'connector';
+      connector.style.position = 'absolute';
+      connector.style.width = '6px';
+      connector.style.left = `${centerXItem}px`;
+      connector.style.top = `${top}px`;
+      connector.style.height = `${height}px`;
+      connector.style.background = 'var(--accent)';
+      connector.style.zIndex = 3;
+      connector.style.borderRadius = '3px';
+      connector.style.transform = 'translateX(-50%)';
+      timelineContainer.appendChild(connector);
+
+      const dot = document.createElement('div');
+      dot.className = 'connector-dot';
+      dot.style.position = 'absolute';
+      dot.style.width = '16px';
+      dot.style.height = '16px';
+      dot.style.borderRadius = '50%';
+      dot.style.background = '#fff';
+      dot.style.border = '4px solid var(--accent)';
+      dot.style.left = `${centerXItem}px`;
+      dot.style.top = `${centerY}px`;
+      dot.style.transform = 'translate(-50%,-50%)';
+      dot.style.zIndex = 4;
+      timelineContainer.appendChild(dot);
+
+      maxX = Math.max(maxX, centerXItem);
+    });
+
+    // set fill width from left edge to maxX (so red fill grows horizontally)
+    if (fillEl) {
+      fillEl.style.left = '0';
+      fillEl.style.transform = 'none';
+      fillEl.style.height = `${lineRect.height}px`;
+      // ensure a minimum width so it's visible; clamp to container width
+      const w = Math.min(Math.max(maxX + 28, 6), containerRect.width);
+      fillEl.style.width = `${w}px`;
+    }
+  }
 }
+
 function scheduleConnectorUpdate(){ clearTimeout(connectorTimer); connectorTimer = setTimeout(updateConnectorsAndFill, 120); }
 window.addEventListener('resize', scheduleConnectorUpdate);
 window.addEventListener('scroll', scheduleConnectorUpdate);
@@ -511,7 +624,6 @@ gridToggle.addEventListener('click', ()=>{
   document.querySelector('.timeline-container').style.display = showingGrid ? 'none' : 'block';
   gridToggle.classList.toggle('active', showingGrid);
   gridToggle.setAttribute('aria-pressed', String(showingGrid));
-  // hide timer when in grid
   updateDoomsdayVisibility();
   if(!showingGrid) scheduleConnectorUpdate();
 });
