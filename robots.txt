@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://its-endless.github.io/mcu_timeline/sitemap.xml

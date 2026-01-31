@@ -3,7 +3,23 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>MCU Chronological Timeline — Grid/Timeline</title>
+<title>MCU Timeline – Marvel Movies & Series in Chronological Order</title>
+<meta name="description" content="Explore the complete MCU timeline with all Marvel movies and TV series in chronological order. Updated Marvel Cinematic Universe watch order.">
+<meta name="keywords" content="MCU timeline, Marvel timeline, MCU chronological order, Marvel movies order, MCU series order">
+<!-- Open Graph -->
+<meta property="og:title" content="MCU Timeline – Marvel Movies & Series in Chronological Order">
+<meta property="og:description" content="Explore the complete MCU timeline with all Marvel movies and TV series in chronological order.">
+<meta property="og:url" content="https://its-endless.github.io/mcu_timeline/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://its-endless.github.io/mcu_timeline/Icon/logo.png">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MCU Timeline – Marvel Movies & Series in Order">
+<meta name="twitter:description" content="Complete Marvel Cinematic Universe timeline in story order.">
+<meta name="twitter:image" content="https://its-endless.github.io/mcu_timeline/Icon/logo.png">
+
+<link rel="canonical" href="https://its-endless.github.io/mcu_timeline/" />
 <link rel="icon" href="Icon/favicon.webp" type="image/webp" />
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -221,6 +237,28 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
   /* ensure connectors won't overlap (we will skip connector drawing on mobile in JS) */
 }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "MCU Timeline",
+  "description": "Complete Marvel Cinematic Universe timeline in chronological order including movies and TV series.",
+  "url": "https://its-endless.github.io/mcu_timeline/",
+  "numberOfItems": 51
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "MCU Timeline",
+  "description": "Marvel Cinematic Universe movies and series in chronological order",
+  "url": "https://its-endless.github.io/mcu_timeline/"
+}
+</script>
+
+
 </head>
 <body>
 
@@ -264,12 +302,33 @@ main{ max-width:1200px; margin:14px auto 80px; padding:0 18px; }
 </div>
 
 <main>
+  <h1 style="
+  position:absolute;
+  left:-9999px;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+">
+  MCU Timeline – Marvel Movies & Series in Chronological Order
+</h1>
   <div class="timeline-container" id="timeline">
     <div class="timeline-line" id="timelineLine"></div>
     <div class="timeline-fill" id="timelineFill"></div>
   </div>
 
   <div class="card-grid" id="cardGrid" aria-hidden="true"></div>
+
+  <p style="
+  position:absolute;
+  left:-9999px;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+">
+  This website shows the complete MCU timeline including all Marvel movies,
+  Disney+ series, and special presentations in chronological order.
+</p>
+
 </main>
 
 <footer style="text-align:center;padding:24px;background:transparent;color:#bbb;font-size:0.9rem">
@@ -307,7 +366,7 @@ const data = [
   { id:29, title:"Spider-Man: No Way Home", type:"movie", year:2024, image:"Spider-Man_No_Way_Home.jpg", trailerId:"JfVOs4VSpmA", desc:"Multiversal villains threaten Peter's world.", extra:{cast:"Tom Holland"} },
   { id:30, title:"Hawkeye", type:"series", year:2024, image:"Hawkeye.jpg", trailerId:"5VYb3B1ETlk", desc:"Clint Barton mentors Kate Bishop at Christmas.", extra:{cast:"Jeremy Renner"} },
   { id:31, title:"Loki", type:"series", year:2012, image:"Loki.jpg", trailerId:"nW948Va-l10", desc:"Loki navigates the TVA across timelines.", extra:{cast:"Tom Hiddleston"} },
-  { id:32, title:"What If...?", type:"series", year:0, image:"What_If....jpg", trailerId:"x9D0uUKJ5KI", desc:"Animated alternate MCU realities.", extra:{cast:"Jeffrey Wright"} },
+  { id:32, title:"What If...?", type:"series", year:"Timeless", image:"What_If.jpg", trailerId:"x9D0uUKJ5KI", desc:"Animated alternate MCU realities.", extra:{cast:"Jeffrey Wright"} },
   { id:33, title:"Moon Knight", type:"series", year:2025, image:"Moon_Knight.jpg", trailerId:"x7Krla_UxRg", desc:"Marc Spector embraces Egyptian god powers.", extra:{cast:"Oscar Isaac"} },
   { id:34, title:"Doctor Strange in the Multiverse of Madness", type:"movie", year:2024, image:"Doctor_Strange_in_the_Multiverse_of_Madness.jpg", trailerId:"aWzlQ2N6qqg", desc:"Strange faces multiversal threats.", extra:{cast:"Benedict Cumberbatch"} },
   { id:35, title:"Ms. Marvel", type:"series", year:2025, image:"Ms._Marvel.jpg", trailerId:"m9EX0f6V11Y", desc:"Kamala Khan discovers her cosmic powers.", extra:{cast:"Iman Vellani"} },
